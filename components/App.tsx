@@ -1,10 +1,10 @@
 import React from "react";
 import MainPage from "./MainPage";
 
-function App() {
+function App({ numberOfOffers }: { numberOfOffers: number }) {
   return (
     <div>
-      <MainPage />
+      <MainPage numberOfOffers={numberOfOffers} />
     </div>
   );
 }
