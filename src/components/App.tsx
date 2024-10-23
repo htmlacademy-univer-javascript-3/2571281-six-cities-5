@@ -1,5 +1,4 @@
-import React from "react";
-import MainPage from "./MainPage";
+import MainPage from './Main';
 
 function App({ numberOfOffers }: { numberOfOffers: number }) {
   return (
