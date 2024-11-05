@@ -19,7 +19,7 @@ function App({ offers }: { offers: Offer[] }) {
           path="/favorites"
           element={
             <PrivateRoute isAuthenticated={isAuthenticated}>
-              <FavoritesPage />
+              <FavoritesPage offers={offers} />
             </PrivateRoute>
           }
         />

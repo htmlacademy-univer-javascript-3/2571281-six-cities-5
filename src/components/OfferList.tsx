@@ -7,6 +7,8 @@ interface OfferListProps {
 }
 
 function OfferList({ offers }: OfferListProps) {
+  // (Пока мы никак не используем активную карточку)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeOfferId, setActiveOfferId] = useState<number | null>(null);
 
   const handleMouseEnter = (offerId: number) => {

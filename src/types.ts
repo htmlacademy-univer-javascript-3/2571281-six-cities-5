@@ -1,4 +1,5 @@
 export type Offer = {
+    id: number;
     isPremium: boolean;
     imageUrl: string;
     price: number;
