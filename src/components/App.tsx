@@ -23,7 +23,7 @@ function App({ offers }: { offers: Offer[] }) {
             </PrivateRoute>
           }
         />
-        <Route path="/offer/:id" element={<OfferPage />} />
+        <Route path="/offer/:id" element={<OfferPage offers={offers}/>} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </BrowserRouter>
