@@ -1,122 +1,11 @@
-type Offer = {
-  isPremium: boolean;
-  imageUrl: string;
-  price: number;
-  isBookmarked: boolean;
-  rating: number;
-  title: string;
-  type: string;
-};
+import OfferList from './OfferList';
+import { Offer } from '../types';
 
-function OfferCard({ offer }: { offer: Offer }) {
-  return (
-    <article className='cities__card place-card'>
-      {offer.isPremium && (
-        <div className='place-card__mark'>
-          <span>Premium</span>
-        </div>
-      )}
-      <div className='cities__image-wrapper place-card__image-wrapper'>
-        <a href='#'>
-          <img
-            className='place-card__image'
-            src={offer.imageUrl}
-            width='260'
-            height='200'
-            alt='Place image'
-          />
-        </a>
-      </div>
-      <div className='place-card__info'>
-        <div className='place-card__price-wrapper'>
-          <div className='place-card__price'>
-            <b className='place-card__price-value'>&euro;{offer.price}</b>
-            <span className='place-card__price-text'>&#47;&nbsp;night</span>
-          </div>
-          <button
-            className={`place-card__bookmark-button button ${
-              offer.isBookmarked
-                ? 'place-card__bookmark-button--active'
-                : ''
-            }`}
-            type='button'
-          >
-            <svg
-              className='place-card__bookmark-icon'
-              width='18'
-              height='19'
-            >
-              <use xlinkHref='#icon-bookmark'></use>
-            </svg>
-            <span className='visually-hidden'>
-              {offer.isBookmarked ? 'In bookmarks' : 'To bookmarks'}
-            </span>
-          </button>
-        </div>
-        <div className='place-card__rating rating'>
-          <div className='place-card__stars rating__stars'>
-            <span style={{ width: `${offer.rating}%` }}></span>
-            <span className='visually-hidden'>Rating</span>
-          </div>
-        </div>
-        <h2 className='place-card__name'>
-          <a href='#'>{offer.title}</a>
-        </h2>
-        <p className='place-card__type'>{offer.type}</p>
-      </div>
-    </article>
-  );
+interface MainPageProps {
+  offers: Offer[];
 }
 
-function MainPage({ numberOfOffers }: { numberOfOffers: number }) {
-  const offers: Offer[] = [
-    {
-      isPremium: true,
-      imageUrl: 'img/apartment-01.jpg',
-      price: 120,
-      isBookmarked: false,
-      rating: 80,
-      title: 'Beautiful & luxurious apartment at great location',
-      type: 'Apartment',
-    },
-    {
-      isPremium: false,
-      imageUrl: 'img/room.jpg',
-      price: 80,
-      isBookmarked: true,
-      rating: 80,
-      title: 'Wood and stone place',
-      type: 'Room',
-    },
-    {
-      isPremium: true,
-      imageUrl: 'img/apartment-02.jpg',
-      price: 132,
-      isBookmarked: false,
-      rating: 80,
-      title: 'Canal View Prinsengracht',
-      type: 'Apartment',
-    },
-    {
-      isPremium: true,
-      imageUrl: 'img/apartment-03.jpg',
-      price: 180,
-      isBookmarked: false,
-      rating: 100,
-      title: 'Nice, cozy, warm big bed apartment',
-      type: 'Apartment',
-    },
-    {
-      isPremium: false,
-      imageUrl: 'img/room.jpg',
-      price: 80,
-      isBookmarked: true,
-      rating: 80,
-      title: 'Wood and stone place',
-      type: 'Room',
-    },
-  ];
-
+function MainPage({ offers }: MainPageProps) {
   return (
     <div className='page page--gray page--main'>
       <header className='header'>
@@ -203,7 +92,7 @@ function MainPage({ numberOfOffers }: { numberOfOffers: number }) {
           <div className='cities__places-container container'>
             <section className='cities__places places'>
               <h2 className='visually-hidden'>Places</h2>
-              <b className='places__found'>{numberOfOffers} places to stay in Amsterdam</b>
+              <b className='places__found'>{offers.length} places to stay in Amsterdam</b>
               <form className='places__sorting' action='#' method='get'>
                 <span className='places__sorting-caption'>Sort by</span>
                 <span className='places__sorting-type' tabIndex={0}>
@@ -231,11 +120,7 @@ function MainPage({ numberOfOffers }: { numberOfOffers: number }) {
                 </ul>
               </form>
 
-              <div className='cities__places-list places__list tabs__content'>
-                {offers.map((offer) => (
-                  <OfferCard key={offer.title} offer={offer} />
-                ))}
-              </div>
+              <OfferList offers={offers} />
             </section>
             <div className='cities__right-section'>
               <section className='cities__map map'></section>
