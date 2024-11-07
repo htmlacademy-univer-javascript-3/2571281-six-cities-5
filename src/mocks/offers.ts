@@ -26,7 +26,7 @@ const offers: Offer[] = [
     reviews: [
       {
         userName: 'Max',
-        userAvatar: 'img/avatar-max.jpg',
+        userAvatar: 'img/avatar-max.jpg', 
         rating: 80,
         text: 'A wonderful stay! The apartment was clean and comfortable.',
         date: '2023-04-15',
@@ -48,7 +48,7 @@ const offers: Offer[] = [
     title: 'Modern Studio with Great Location',
     type: 'Studio',
     features: ['Kitchen', 'Dishwasher', 'Cable TV', 'Fridge'],
-    hostAvatar: 'img/avatar-john.jpg',
+    hostAvatar: 'img/avatar-max.jpg',
     hostName: 'John',
     hostStatus: 'Pro',
     description: [
@@ -58,14 +58,14 @@ const offers: Offer[] = [
     reviews: [
       {
         userName: 'Alice',
-        userAvatar: 'img/avatar-alice.jpg',
+        userAvatar: 'img/avatar-angelina.jpg',
         rating: 90,
         text: 'Lovely studio, very clean and great location!',
         date: '2023-05-10',
       },
       {
         userName: 'Tom',
-        userAvatar: 'img/avatar-tom.jpg',
+        userAvatar: 'img/avatar-max.jpg',
         rating: 70,
         text: 'Nice place but could use better soundproofing.',
         date: '2023-05-20',
@@ -87,7 +87,7 @@ const offers: Offer[] = [
     title: 'Luxurious Canal View Apartment',
     type: 'Apartment',
     features: ['Wi-Fi', 'Heating', 'Kitchen', 'Dishwasher', 'Coffee machine'],
-    hostAvatar: 'img/avatar-mary.jpg',
+    hostAvatar: 'img/avatar-angelina.jpg',
     hostName: 'Mary',
     hostStatus: 'Pro',
     description: [
@@ -97,7 +97,7 @@ const offers: Offer[] = [
     reviews: [
       {
         userName: 'Emily',
-        userAvatar: 'img/avatar-emily.jpg',
+        userAvatar: 'img/avatar-angelina.jpg',
         rating: 100,
         text: 'Absolutely loved it! The view was breathtaking.',
         date: '2023-06-01',
@@ -119,7 +119,7 @@ const offers: Offer[] = [
     title: 'Cozy Apartment Near the Park',
     type: 'Apartment',
     features: ['Wi-Fi', 'Towels', 'Washing machine', 'Kitchen'],
-    hostAvatar: 'img/avatar-chris.jpg',
+    hostAvatar: 'img/avatar-max.jpg',
     hostName: 'Chris',
     hostStatus: 'Pro',
     description: [
@@ -129,14 +129,14 @@ const offers: Offer[] = [
     reviews: [
       {
         userName: 'Sarah',
-        userAvatar: 'img/avatar-sarah.jpg',
+        userAvatar: 'img/avatar-angelina.jpg',
         rating: 80,
         text: 'Very cozy and well-located near the park. Great value!',
         date: '2023-06-15',
       },
       {
         userName: 'Lucas',
-        userAvatar: 'img/avatar-lucas.jpg',
+        userAvatar: 'img/avatar-max.jpg',
         rating: 60,
         text: 'Nice place, but a bit noisy due to nearby traffic.',
         date: '2023-06-18',

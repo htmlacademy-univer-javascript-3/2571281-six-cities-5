@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { Offer } from '../types';
+import ReviewForm from './ReviewForm';
 
 interface OfferPageProps {
   offers: Offer[];
@@ -123,7 +124,7 @@ function OfferPage({ offers }: OfferPageProps) {
               </div>
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">
-                  Reviews &middot; <span className="reviews__amount">{offer.reviews.length}</span>
+    Reviews &middot; <span className="reviews__amount">{offer.reviews.length}</span>
                 </h2>
                 <ul className="reviews__list">
                   {offer.reviews.map((review) => (
@@ -158,7 +159,11 @@ function OfferPage({ offers }: OfferPageProps) {
                     </li>
                   ))}
                 </ul>
+
+                <ReviewForm />
+
               </section>
+
             </div>
           </div>
           <section className="offer__map map"></section>
