@@ -26,7 +26,7 @@ const offers: Offer[] = [
     reviews: [
       {
         userName: 'Max',
-        userAvatar: 'img/avatar-max.jpg', 
+        userAvatar: 'img/avatar-max.jpg',
         rating: 80,
         text: 'A wonderful stay! The apartment was clean and comfortable.',
         date: '2023-04-15',
