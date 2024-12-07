@@ -1,5 +1,6 @@
 import OfferList from './OfferList';
 import { Offer } from '../types';
+import Map from './Map';
 
 interface MainPageProps {
   offers: Offer[];
@@ -70,6 +71,7 @@ function MainPage({ offers }: MainPageProps) {
               <li className='locations__item'>
                 <a
                   className='locations__item-link tabs__item tabs__item--active'
+                  href='#'
                 >
                   <span>Amsterdam</span>
                 </a>
@@ -123,7 +125,9 @@ function MainPage({ offers }: MainPageProps) {
               <OfferList offers={offers} />
             </section>
             <div className='cities__right-section'>
-              <section className='cities__map map'></section>
+              <section className='cities__map map'>
+                <Map offers={offers} />
+              </section>
             </div>
           </div>
         </div>
