@@ -1,6 +1,9 @@
 import { Link, useParams } from 'react-router-dom';
 import { Offer } from '../types';
+import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
+import Map from './Map';
+import OfferList from './OfferList';
 
 interface OfferPageProps {
   offers: Offer[];
@@ -13,6 +16,10 @@ function OfferPage({ offers }: OfferPageProps) {
   if (!offer) {
     return <p>Offer not found</p>;
   }
+
+  const nearbyOffers = offers
+    .filter((o) => o.id !== offer.id)
+    .slice(0, 3);
 
   return (
     <div className="page">
@@ -122,99 +129,19 @@ function OfferPage({ offers }: OfferPageProps) {
                   ))}
                 </div>
               </div>
-              <section className="offer__reviews reviews">
-                <h2 className="reviews__title">
-    Reviews &middot; <span className="reviews__amount">{offer.reviews.length}</span>
-                </h2>
-                <ul className="reviews__list">
-                  {offer.reviews.map((review) => (
-                    <li key={review.date} className="reviews__item">
-                      <div className="reviews__user user">
-                        <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                          <img
-                            className="reviews__avatar user__avatar"
-                            src={review.userAvatar}
-                            width="54"
-                            height="54"
-                            alt="Review avatar"
-                          />
-                        </div>
-                        <span className="reviews__user-name">{review.userName}</span>
-                      </div>
-                      <div className="reviews__info">
-                        <div className="reviews__rating rating">
-                          <div className="reviews__stars rating__stars">
-                            <span style={{ width: `${review.rating}%` }}></span>
-                            <span className="visually-hidden">Rating</span>
-                          </div>
-                        </div>
-                        <p className="reviews__text">{review.text}</p>
-                        <time className="reviews__time" dateTime={review.date}>
-                          {new Date(review.date).toLocaleDateString('en-US', {
-                            month: 'long',
-                            year: 'numeric',
-                          })}
-                        </time>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
 
-                <ReviewForm />
-
-              </section>
-
+              <ReviewList reviews={offer.reviews} />
+              <ReviewForm />
             </div>
           </div>
-          <section className="offer__map map"></section>
+          <section className="offer__map map">
+            <Map offers={[offer, ...nearbyOffers]} />
+          </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <div className="near-places__list places__list">
-              {offers
-                .filter((nearbyOffer) => nearbyOffer.id !== offer.id)
-                .slice(0, 3)
-                .map((nearbyOffer) => (
-                  <article key={nearbyOffer.id} className="near-places__card place-card">
-                    <div className="near-places__image-wrapper place-card__image-wrapper">
-                      <Link to={`/offer/${nearbyOffer.id}`}>
-                        <img
-                          className="place-card__image"
-                          src={nearbyOffer.imageUrl}
-                          width="260"
-                          height="200"
-                          alt="Nearby place image"
-                        />
-                      </Link>
-                    </div>
-                    <div className="place-card__info">
-                      <div className="place-card__price-wrapper">
-                        <div className="place-card__price">
-                          <b className="place-card__price-value">€{nearbyOffer.price}</b>
-                          <span className="place-card__price-text">&#47;&nbsp;night</span>
-                        </div>
-                        <button className="place-card__bookmark-button button" type="button">
-                          <svg className="place-card__bookmark-icon" width="18" height="19">
-                            <use xlinkHref="#icon-bookmark"></use>
-                          </svg>
-                          <span className="visually-hidden">To bookmarks</span>
-                        </button>
-                      </div>
-                      <div className="place-card__rating rating">
-                        <div className="place-card__stars rating__stars">
-                          <span style={{ width: `${nearbyOffer.rating}%` }}></span>
-                          <span className="visually-hidden">Rating</span>
-                        </div>
-                      </div>
-                      <h2 className="place-card__name">
-                        <Link to={`/offer/${nearbyOffer.id}`}>{nearbyOffer.title}</Link>
-                      </h2>
-                      <p className="place-card__type">{nearbyOffer.type}</p>
-                    </div>
-                  </article>
-                ))}
-            </div>
+            <OfferList offers={nearbyOffers} />
           </section>
         </div>
       </main>
