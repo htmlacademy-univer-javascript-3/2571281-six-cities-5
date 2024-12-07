@@ -1,19 +1,23 @@
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import CitiesList from './CitiesList.tsx';
 import OfferList from './OfferList';
-import { Offer } from '../types';
 import Map from './Map';
 
-interface MainPageProps {
-  offers: Offer[];
-}
+const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
-function MainPage({ offers }: MainPageProps) {
+function MainPage() {
+  const currentCity = useSelector((state: RootState) => state.city);
+  const allOffers = useSelector((state: RootState) => state.offers);
+  const filteredOffers = allOffers.filter((offer) => offer.city === currentCity);
+
   return (
     <div className='page page--gray page--main'>
       <header className='header'>
         <div className='container'>
           <div className='header__wrapper'>
             <div className='header__left'>
-              <a className='header__logo-link header__logo-link--active'>
+              <a className='header__logo-link header__logo-link--active' href='/'>
                 <img
                   className='header__logo'
                   src='img/logo.svg'
@@ -52,41 +56,7 @@ function MainPage({ offers }: MainPageProps) {
         <h1 className='visually-hidden'>Cities</h1>
         <div className='tabs'>
           <section className='locations container'>
-            <ul className='locations__list tabs__list'>
-              <li className='locations__item'>
-                <a className='locations__item-link tabs__item' href='#'>
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className='locations__item'>
-                <a className='locations__item-link tabs__item' href='#'>
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className='locations__item'>
-                <a className='locations__item-link tabs__item' href='#'>
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className='locations__item'>
-                <a
-                  className='locations__item-link tabs__item tabs__item--active'
-                  href='#'
-                >
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className='locations__item'>
-                <a className='locations__item-link tabs__item' href='#'>
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className='locations__item'>
-                <a className='locations__item-link tabs__item' href='#'>
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
-            </ul>
+            <CitiesList cities={CITIES} />
           </section>
         </div>
 
@@ -94,7 +64,7 @@ function MainPage({ offers }: MainPageProps) {
           <div className='cities__places-container container'>
             <section className='cities__places places'>
               <h2 className='visually-hidden'>Places</h2>
-              <b className='places__found'>{offers.length} places to stay in Amsterdam</b>
+              <b className='places__found'>{filteredOffers.length} places to stay in {currentCity}</b>
               <form className='places__sorting' action='#' method='get'>
                 <span className='places__sorting-caption'>Sort by</span>
                 <span className='places__sorting-type' tabIndex={0}>
@@ -104,10 +74,7 @@ function MainPage({ offers }: MainPageProps) {
                   </svg>
                 </span>
                 <ul className='places__options places__options--custom places__options--opened'>
-                  <li
-                    className='places__option places__option--active'
-                    tabIndex={0}
-                  >
+                  <li className='places__option places__option--active' tabIndex={0}>
                     Popular
                   </li>
                   <li className='places__option' tabIndex={0}>
@@ -122,11 +89,11 @@ function MainPage({ offers }: MainPageProps) {
                 </ul>
               </form>
 
-              <OfferList offers={offers} />
+              <OfferList offers={filteredOffers} />
             </section>
             <div className='cities__right-section'>
               <section className='cities__map map'>
-                <Map offers={offers} />
+                <Map offers={filteredOffers} />
               </section>
             </div>
           </div>
