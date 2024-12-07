@@ -3,7 +3,7 @@ import { Offer } from '../types';
 import MainPage from './Main';
 import LoginPage from './Login';
 import FavoritesPage from './Favorites';
-import OfferPage from './Offer';
+import OfferPage from './OfferPage';
 import Page404 from './404';
 import PrivateRoute from './PrivateRoute';
 
