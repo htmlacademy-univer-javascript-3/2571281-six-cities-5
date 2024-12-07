@@ -6,7 +6,7 @@ export type Review = {
     date: string;
   };
 
-  export type Offer = {
+export type Offer = {
     id: number;
     isPremium: boolean;
     imageUrl: string;
@@ -26,4 +26,4 @@ export type Review = {
     longitude: number;
     city: string;
   };
-  
+
