@@ -22,4 +22,8 @@ export type Offer = {
     hostStatus: string;
     description: string[];
     reviews: Review[];
+    latitude: number;
+    longitude: number;
+    city: string;
   };
+
