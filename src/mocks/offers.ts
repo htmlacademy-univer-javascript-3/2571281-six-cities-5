@@ -32,6 +32,9 @@ const offers: Offer[] = [
         date: '2023-04-15',
       },
     ],
+    latitude: 52.3909553943508,
+    longitude: 4.85309666406198,
+    city: 'Amsterdam',
   },
   {
     id: 2,
@@ -71,6 +74,9 @@ const offers: Offer[] = [
         date: '2023-05-20',
       },
     ],
+    latitude: 52.3609553943508,
+    longitude: 4.85309666406198,
+    city: 'Amsterdam',
   },
   {
     id: 3,
@@ -103,6 +109,9 @@ const offers: Offer[] = [
         date: '2023-06-01',
       },
     ],
+    latitude: 52.3909553943508,
+    longitude: 4.929309666406198,
+    city: 'Amsterdam',
   },
   {
     id: 4,
@@ -142,6 +151,9 @@ const offers: Offer[] = [
         date: '2023-06-18',
       },
     ],
+    latitude: 52.3809553943508,
+    longitude: 4.939309666406198,
+    city: 'Amsterdam',
   },
 ];
 
