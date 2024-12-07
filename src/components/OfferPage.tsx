@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Offer } from '../types';
 import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
@@ -135,7 +135,7 @@ function OfferPage({ offers }: OfferPageProps) {
             </div>
           </div>
           <section className="offer__map map">
-            <Map offers={[offer, ...nearbyOffers]} />
+            <Map offers={nearbyOffers} />
           </section>
         </section>
         <div className="container">
