@@ -1,14 +1,15 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import { setOffers } from './store/action'; 
 import App from './components/App';
 import offers from './mocks/offers';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+store.dispatch(setOffers(offers));
 
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App offers={offers} />
-  </React.StrictMode>
+  </Provider>
 );
