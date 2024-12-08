@@ -17,7 +17,7 @@ function OfferCard({ offer }: OfferCardProps) {
         <Link to={`/offer/${offer.id}`}>
           <img
             className="place-card__image"
-            src={offer.imageUrl}
+            src={offer.previewImage}
             width="260"
             height="200"
             alt="Place image"
@@ -32,7 +32,7 @@ function OfferCard({ offer }: OfferCardProps) {
           </div>
           <button
             className={`place-card__bookmark-button button ${
-              offer.isBookmarked ? 'place-card__bookmark-button--active' : ''
+              offer.isFavorite ? 'place-card__bookmark-button--active' : ''
             }`}
             type="button"
           >
@@ -44,7 +44,7 @@ function OfferCard({ offer }: OfferCardProps) {
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
             <span className="visually-hidden">
-              {offer.isBookmarked ? 'In bookmarks' : 'To bookmarks'}
+              {offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}
             </span>
           </button>
         </div>
