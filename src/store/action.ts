@@ -10,6 +10,12 @@ export const setOffers = (offers: Offer[]) => ({
   payload: offers,
 });
 
+export const setCurrentOffer = (offer: Offer | null) => ({
+  type: 'setCurrentOffer' as const,
+  payload: offer,
+});
+
 export type Actions =
   | ReturnType<typeof setCity>
-  | ReturnType<typeof setOffers>;
+  | ReturnType<typeof setOffers>
+  | ReturnType<typeof setCurrentOffer>;

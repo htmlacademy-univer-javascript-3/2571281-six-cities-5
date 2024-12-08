@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Offer } from '../types';
 import MainPage from './Main';
 import LoginPage from './Login';
 import FavoritesPage from './Favorites';
@@ -7,7 +6,7 @@ import OfferPage from './OfferPage';
 import Page404 from './404';
 import PrivateRoute from './PrivateRoute';
 
-function App({ offers }: { offers: Offer[] }) {
+function App() {
   const isAuthenticated = false;
 
   return (
@@ -19,11 +18,11 @@ function App({ offers }: { offers: Offer[] }) {
           path="/favorites"
           element={
             <PrivateRoute isAuthenticated={isAuthenticated}>
-              <FavoritesPage offers={offers} />
+              <FavoritesPage />
             </PrivateRoute>
           }
         />
-        <Route path="/offer/:id" element={<OfferPage offers={offers}/>} />
+        <Route path="/offer/:id" element={<OfferPage />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </BrowserRouter>
