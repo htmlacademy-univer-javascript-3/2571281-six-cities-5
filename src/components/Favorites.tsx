@@ -1,12 +1,10 @@
-import { Offer } from '../types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 import OfferCard from './OfferCard';
 
-interface FavoritesPageProps {
-  offers: Offer[];
-}
-
-function FavoritesPage({ offers }: FavoritesPageProps) {
-  const favoriteOffers = offers.filter((offer) => offer.isBookmarked);
+function FavoritesPage() {
+  const offers = useSelector((state: RootState) => state.offers);
+  const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
   return (
     <div className="page">
@@ -53,11 +51,11 @@ function FavoritesPage({ offers }: FavoritesPageProps) {
             <ul className="favorites__list">
               {favoriteOffers.length > 0 ? (
                 favoriteOffers.map((offer) => (
-                  <li key={offer.title} className="favorites__locations-items">
+                  <li key={offer.id} className="favorites__locations-items">
                     <div className="favorites__locations locations locations--current">
                       <div className="locations__item">
                         <a className="locations__item-link" href="#">
-                          <span>Amsterdam</span>
+                          <span>{offer.city.name}</span>
                         </a>
                       </div>
                     </div>
