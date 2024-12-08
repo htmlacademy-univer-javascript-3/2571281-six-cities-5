@@ -1,15 +1,14 @@
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { setOffers } from './store/action';
+import { fetchOffers } from './store/api-actions';
 import App from './components/App';
-import offers from './mocks/offers';
 
-store.dispatch(setOffers(offers));
+store.dispatch(fetchOffers());
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <Provider store={store}>
-    <App offers={offers} />
+    <App />
   </Provider>
 );

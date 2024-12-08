@@ -7,23 +7,27 @@ export type Review = {
   };
 
 export type Offer = {
-    id: number;
-    isPremium: boolean;
-    imageUrl: string;
-    imageUrls: string[];
-    price: number;
-    isBookmarked: boolean;
-    rating: number;
+    id: string;
     title: string;
     type: string;
-    features: string[];
-    hostAvatar: string;
-    hostName: string;
-    hostStatus: string;
-    description: string[];
-    reviews: Review[];
-    latitude: number;
-    longitude: number;
-    city: string;
+    price: number;
+    city: {
+      name: string;
+      location: {
+        latitude: number;
+        longitude: number;
+        zoom: number;
+      };
+    };
+    location: {
+      latitude: number;
+      longitude: number;
+      zoom: number;
+    };
+    isFavorite: boolean;
+    isPremium: boolean;
+    rating: number;
+    previewImage: string;
   };
+
 
