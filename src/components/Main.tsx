@@ -12,8 +12,8 @@ function MainPage() {
   const currentCity = useSelector((state: RootState) => state.city);
   const allOffers = useSelector((state: RootState) => state.offers);
   const [sortOption, setSortOption] = useState<SortingOption>('Popular');
-  const [hoveredOfferId, setHoveredOfferId] = useState<number | null>(null);
-  const filteredOffers = allOffers.filter((offer) => offer.city === currentCity);
+  const [hoveredOfferId, setHoveredOfferId] = useState<string | null>(null);
+  const filteredOffers = allOffers.filter((offer) => offer.city.name === currentCity);
   const sortedOffers = [...filteredOffers];
   switch (sortOption) {
     case 'Price: low to high':

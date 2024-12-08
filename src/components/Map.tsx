@@ -5,19 +5,19 @@ import { Offer } from '../types';
 
 interface MapProps {
   offers: Offer[];
-  hoveredOfferId?: number | null;
+  hoveredOfferId?: string | null;
 }
 
 const defaultIcon = new Icon({
   iconUrl: 'img/pin.svg',
   iconSize: [40, 40],
-  iconAnchor: [20, 40]
+  iconAnchor: [20, 40],
 });
 
 const activeIcon = new Icon({
   iconUrl: 'img/pin-active.svg',
   iconSize: [40, 40],
-  iconAnchor: [20, 40]
+  iconAnchor: [20, 40],
 });
 
 function Map({ offers, hoveredOfferId }: MapProps) {
@@ -27,16 +27,23 @@ function Map({ offers, hoveredOfferId }: MapProps) {
     if (!mapRef.current) {
       return;
     }
+
     const map = L.map(mapRef.current, {
       center: [52.38333, 4.9],
-      zoom: 12
+      zoom: 12,
     });
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
     const markersLayer = layerGroup().addTo(map);
+
     offers.forEach((offer) => {
       const icon = offer.id === hoveredOfferId ? activeIcon : defaultIcon;
-      new Marker([offer.latitude, offer.longitude]).setIcon(icon).addTo(markersLayer);
+      new Marker([offer.location.latitude, offer.location.longitude])
+        .setIcon(icon)
+        .addTo(markersLayer);
     });
+
     return () => {
       map.remove();
     };

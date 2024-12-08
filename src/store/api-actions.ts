@@ -9,7 +9,7 @@ export const fetchOffers = () => async (
   _getState: () => State,
   api: AxiosInstance
 ) => {
-  const { data } = await api.get<Offer[]>('/six-cities/offers');
+  const { data } = await api.get<Offer[]>('/offers');
   dispatch(setOffers(data));
 };
 
@@ -19,6 +19,6 @@ export const fetchOfferById = (offerId: string) => async (
   api: AxiosInstance
 ) => {
   dispatch(setCurrentOffer(null));
-  const { data } = await api.get<Offer>(`/six-cities/offers/${offerId}`);
+  const { data } = await api.get<Offer>(`/offers/${offerId}`);
   dispatch(setCurrentOffer(data));
 };
