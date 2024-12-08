@@ -5,16 +5,25 @@ import CitiesList from './CitiesList';
 import OfferList from './OfferList';
 import Map from './Map';
 import SortingOptions from './SortingOptions';
+import Spinner from '../spinner/Spinner';
 
 type SortingOption = 'Popular' | 'Price: low to high' | 'Price: high to low' | 'Top rated first';
 
 function MainPage() {
   const currentCity = useSelector((state: RootState) => state.city);
   const allOffers = useSelector((state: RootState) => state.offers);
+  const isLoading = useSelector((state: RootState) => state.isLoading);
+
   const [sortOption, setSortOption] = useState<SortingOption>('Popular');
   const [hoveredOfferId, setHoveredOfferId] = useState<string | null>(null);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   const filteredOffers = allOffers.filter((offer) => offer.city.name === currentCity);
   const sortedOffers = [...filteredOffers];
+
   switch (sortOption) {
     case 'Price: low to high':
       sortedOffers.sort((a, b) => a.price - b.price);

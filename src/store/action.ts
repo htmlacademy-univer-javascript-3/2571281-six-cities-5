@@ -15,7 +15,13 @@ export const setCurrentOffer = (offer: Offer | null) => ({
   payload: offer,
 });
 
+export const setLoading = (isLoading: boolean) => ({
+  type: 'setLoading' as const,
+  payload: isLoading,
+});
+
 export type Actions =
   | ReturnType<typeof setCity>
   | ReturnType<typeof setOffers>
-  | ReturnType<typeof setCurrentOffer>;
+  | ReturnType<typeof setCurrentOffer>
+  | ReturnType<typeof setLoading>;
