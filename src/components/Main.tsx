@@ -1,15 +1,33 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import CitiesList from './CitiesList.tsx';
+import { useState } from 'react';
+import CitiesList from './CitiesList';
 import OfferList from './OfferList';
 import Map from './Map';
+import SortingOptions from './SortingOptions';
 
-const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+type SortingOption = 'Popular' | 'Price: low to high' | 'Price: high to low' | 'Top rated first';
 
 function MainPage() {
   const currentCity = useSelector((state: RootState) => state.city);
   const allOffers = useSelector((state: RootState) => state.offers);
+  const [sortOption, setSortOption] = useState<SortingOption>('Popular');
+  const [hoveredOfferId, setHoveredOfferId] = useState<number | null>(null);
   const filteredOffers = allOffers.filter((offer) => offer.city === currentCity);
+  const sortedOffers = [...filteredOffers];
+  switch (sortOption) {
+    case 'Price: low to high':
+      sortedOffers.sort((a, b) => a.price - b.price);
+      break;
+    case 'Price: high to low':
+      sortedOffers.sort((a, b) => b.price - a.price);
+      break;
+    case 'Top rated first':
+      sortedOffers.sort((a, b) => b.rating - a.rating);
+      break;
+    default:
+      break;
+  }
 
   return (
     <div className='page page--gray page--main'>
@@ -30,10 +48,7 @@ function MainPage() {
             <nav className='header__nav'>
               <ul className='header__nav-list'>
                 <li className='header__nav-item user'>
-                  <a
-                    className='header__nav-link header__nav-link--profile'
-                    href='#'
-                  >
+                  <a className='header__nav-link header__nav-link--profile' href='#'>
                     <div className='header__avatar-wrapper user__avatar-wrapper'></div>
                     <span className='header__user-name user__name'>
                       Oliver.conner@gmail.com
@@ -51,49 +66,24 @@ function MainPage() {
           </div>
         </div>
       </header>
-
       <main className='page__main page__main--index'>
         <h1 className='visually-hidden'>Cities</h1>
         <div className='tabs'>
           <section className='locations container'>
-            <CitiesList cities={CITIES} />
+            <CitiesList cities={['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf']} />
           </section>
         </div>
-
         <div className='cities'>
           <div className='cities__places-container container'>
             <section className='cities__places places'>
               <h2 className='visually-hidden'>Places</h2>
-              <b className='places__found'>{filteredOffers.length} places to stay in {currentCity}</b>
-              <form className='places__sorting' action='#' method='get'>
-                <span className='places__sorting-caption'>Sort by</span>
-                <span className='places__sorting-type' tabIndex={0}>
-                  Popular
-                  <svg className='places__sorting-arrow' width='7' height='4'>
-                    <use xlinkHref='#icon-arrow-select'></use>
-                  </svg>
-                </span>
-                <ul className='places__options places__options--custom places__options--opened'>
-                  <li className='places__option places__option--active' tabIndex={0}>
-                    Popular
-                  </li>
-                  <li className='places__option' tabIndex={0}>
-                    Price: low to high
-                  </li>
-                  <li className='places__option' tabIndex={0}>
-                    Price: high to low
-                  </li>
-                  <li className='places__option' tabIndex={0}>
-                    Top rated first
-                  </li>
-                </ul>
-              </form>
-
-              <OfferList offers={filteredOffers} />
+              <b className='places__found'>{sortedOffers.length} places to stay in {currentCity}</b>
+              <SortingOptions currentSort={sortOption} onSortChange={setSortOption} />
+              <OfferList offers={sortedOffers} onOfferHover={setHoveredOfferId} />
             </section>
             <div className='cities__right-section'>
               <section className='cities__map map'>
-                <Map offers={filteredOffers} />
+                <Map offers={sortedOffers} hoveredOfferId={hoveredOfferId} />
               </section>
             </div>
           </div>
