@@ -1,4 +1,4 @@
-import { Offer } from '../types';
+import { Offer, User } from '../types';
 import { Actions } from './action';
 
 export type State = {
@@ -7,6 +7,7 @@ export type State = {
   currentOffer: Offer | null;
   isLoading: boolean;
   authorizationStatus: string;
+  user: User | null;
 };
 
 const initialState: State = {
@@ -14,7 +15,8 @@ const initialState: State = {
   offers: [],
   currentOffer: null,
   isLoading: false,
-  authorizationStatus: 'UNKNOWN'
+  authorizationStatus: 'UNKNOWN',
+  user: null,
 };
 
 function reducer(state: State = initialState, action: Actions): State {
@@ -29,6 +31,8 @@ function reducer(state: State = initialState, action: Actions): State {
       return { ...state, isLoading: action.payload };
     case 'setAuthorizationStatus':
       return { ...state, authorizationStatus: action.payload };
+    case 'setUser':
+      return { ...state, user: action.payload };
     default:
       return state;
   }
