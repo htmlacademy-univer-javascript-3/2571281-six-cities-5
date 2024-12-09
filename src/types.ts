@@ -6,6 +6,14 @@ export type Review = {
     date: string;
   };
 
+export type User = {
+    name: string;
+    avatarUrl: string;
+    isPro: boolean;
+    email: string;
+    token: string;
+  };
+
 export type Offer = {
     id: string;
     title: string;
