@@ -20,8 +20,14 @@ export const setLoading = (isLoading: boolean) => ({
   payload: isLoading,
 });
 
+export const setAuthorizationStatus = (status: string) => ({
+  type: 'setAuthorizationStatus' as const,
+  payload: status,
+});
+
 export type Actions =
   | ReturnType<typeof setCity>
   | ReturnType<typeof setOffers>
   | ReturnType<typeof setCurrentOffer>
-  | ReturnType<typeof setLoading>;
+  | ReturnType<typeof setLoading>
+  | ReturnType<typeof setAuthorizationStatus>;

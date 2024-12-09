@@ -6,6 +6,7 @@ export type State = {
   offers: Offer[];
   currentOffer: Offer | null;
   isLoading: boolean;
+  authorizationStatus: string;
 };
 
 const initialState: State = {
@@ -13,6 +14,7 @@ const initialState: State = {
   offers: [],
   currentOffer: null,
   isLoading: false,
+  authorizationStatus: 'UNKNOWN'
 };
 
 function reducer(state: State = initialState, action: Actions): State {
@@ -25,6 +27,8 @@ function reducer(state: State = initialState, action: Actions): State {
       return { ...state, currentOffer: action.payload };
     case 'setLoading':
       return { ...state, isLoading: action.payload };
+    case 'setAuthorizationStatus':
+      return { ...state, authorizationStatus: action.payload };
     default:
       return state;
   }
