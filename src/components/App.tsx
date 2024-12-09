@@ -7,8 +7,6 @@ import Page404 from './404';
 import PrivateRoute from './PrivateRoute';
 
 function App() {
-  const isAuthenticated = false;
-
   return (
     <BrowserRouter>
       <Routes>
@@ -17,7 +15,7 @@ function App() {
         <Route
           path="/favorites"
           element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
+            <PrivateRoute >
               <FavoritesPage />
             </PrivateRoute>
           }
