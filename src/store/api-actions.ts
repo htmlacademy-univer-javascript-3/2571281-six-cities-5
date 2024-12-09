@@ -42,3 +42,22 @@ export const login = () => async (
     dispatch(setLoading(false));
   }
 };
+
+export const authorize = (email: string, password: string) => async (
+  dispatch: Dispatch,
+  _getState: () => State,
+  api: AxiosInstance
+) => {
+  dispatch(setLoading(true));
+  try {
+    const { data } = await api.post<User>('/login', { email, password });
+    dispatch(setUser(data));
+    dispatch(setAuthorizationStatus('AUTH'));
+    api.defaults.headers.common['X-Token'] = data.token;
+  } catch {
+    dispatch(setAuthorizationStatus('NO_AUTH'));
+    dispatch(setUser(null));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
