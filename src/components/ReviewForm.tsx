@@ -31,23 +31,25 @@ function ReviewForm() {
     validateForm(text, rating);
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!id || rating === null) {
-      return;
-    }
-    setIsFormDisabled(true);
-    setError('');
-    try {
-      await dispatch(postComment(id, { comment: review, rating }));
-      setRating(null);
-      setReview('');
-      setIsSubmitDisabled(true);
-    } catch {
-      setError('Error. Please try again.');
-    } finally {
-      setIsFormDisabled(false);
-    }
+    (async () => {
+      if (!id || rating === null) {
+        return;
+      }
+      setIsFormDisabled(true);
+      setError('');
+      try {
+        await dispatch(postComment(id, { comment: review, rating }));
+        setRating(null);
+        setReview('');
+        setIsSubmitDisabled(true);
+      } catch {
+        setError('Error. Please try again.');
+      } finally {
+        setIsFormDisabled(false);
+      }
+    })();
   };
 
   const getRatingTitle = (star: number) => {
