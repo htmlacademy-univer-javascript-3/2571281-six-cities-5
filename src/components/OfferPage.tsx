@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 import { RootState, AppDispatch } from '../store';
 import { fetchOfferById, fetchCommentsByOfferId, fetchNearbyOffers } from '../store/api-actions';
 import ReviewList from './ReviewList';
@@ -11,17 +12,28 @@ import OfferList from './OfferList';
 function OfferPage() {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const currentOffer = useSelector((state: RootState) => state.currentOffer);
   const comments = useSelector((state: RootState) => state.comments);
   const nearbyOffers = useSelector((state: RootState) => state.nearbyOffers);
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchOfferById(id));
-      dispatch(fetchCommentsByOfferId(id));
-      dispatch(fetchNearbyOffers(id));
+    async function loadOfferData() {
+      if (!id) {
+        return;
+      }
+      try {
+        await dispatch(fetchOfferById(id));
+        await dispatch(fetchCommentsByOfferId(id));
+        await dispatch(fetchNearbyOffers(id));
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+          navigate('*');
+        }
+      }
     }
-  }, [id, dispatch]);
+    loadOfferData();
+  }, [id, dispatch, navigate]);
 
   if (!currentOffer) {
     return <p>Loading offer details...</p>;
