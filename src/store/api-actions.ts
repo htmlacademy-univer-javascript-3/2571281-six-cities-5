@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
-import { setOffers, setCurrentOffer, setLoading, setAuthorizationStatus, setUser } from './action';
-import { State } from './reducer';
-import { Offer, User } from '../types';
 import { AxiosInstance } from 'axios';
+import { setOffers, setCurrentOffer, setLoading, setAuthorizationStatus, setUser, setComments } from './action';
+import { State } from './reducer';
+import { Offer, User, Comment } from '../types';
 
 export const fetchOffers = () => async (
   dispatch: Dispatch,
@@ -24,6 +24,22 @@ export const fetchOfferById = (offerId: string) => async (
   const { data } = await api.get<Offer>(`/offers/${offerId}`);
   dispatch(setCurrentOffer(data));
 };
+
+export const fetchCommentsByOfferId = (offerId: string) => async (
+  dispatch: Dispatch,
+  _getState: () => State,
+  api: AxiosInstance
+) => {
+  dispatch(setLoading(true));
+  try {
+    const { data } = await api.get<Comment[]>(`/comments/${offerId}`);
+    dispatch(setComments(data));
+  } catch (error) {
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
 
 export const login = () => async (
   dispatch: Dispatch,

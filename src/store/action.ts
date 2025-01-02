@@ -1,33 +1,38 @@
-import { Offer, User } from '../types';
+import { Offer, User, Comment } from '../types';
 
 export const setCity = (city: string) => ({
   type: 'setCity' as const,
-  payload: city,
+  payload: city
 });
 
 export const setOffers = (offers: Offer[]) => ({
   type: 'setOffers' as const,
-  payload: offers,
+  payload: offers
 });
 
 export const setCurrentOffer = (offer: Offer | null) => ({
   type: 'setCurrentOffer' as const,
-  payload: offer,
+  payload: offer
 });
 
 export const setLoading = (isLoading: boolean) => ({
   type: 'setLoading' as const,
-  payload: isLoading,
+  payload: isLoading
 });
 
 export const setAuthorizationStatus = (status: string) => ({
   type: 'setAuthorizationStatus' as const,
-  payload: status,
+  payload: status
 });
 
 export const setUser = (user: User | null) => ({
   type: 'setUser' as const,
-  payload: user,
+  payload: user
+});
+
+export const setComments = (comments: Comment[]) => ({
+  type: 'setComments' as const,
+  payload: comments
 });
 
 export type Actions =
@@ -36,4 +41,5 @@ export type Actions =
   | ReturnType<typeof setCurrentOffer>
   | ReturnType<typeof setLoading>
   | ReturnType<typeof setAuthorizationStatus>
-  | ReturnType<typeof setUser>;
+  | ReturnType<typeof setUser>
+  | ReturnType<typeof setComments>;

@@ -1,23 +1,24 @@
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store';
-import { fetchOfferById } from '../store/api-actions';
+import { RootState, AppDispatch } from '../store';
+import { fetchOfferById, fetchCommentsByOfferId } from '../store/api-actions';
 import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
 import Map from './Map';
 import OfferList from './OfferList';
-import { useEffect } from 'react';
-import { AppDispatch } from '../store';
 
 function OfferPage() {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const currentOffer = useSelector((state: RootState) => state.currentOffer);
+  const comments = useSelector((state: RootState) => state.comments);
   const offers = useSelector((state: RootState) => state.offers);
 
   useEffect(() => {
     if (id) {
       dispatch(fetchOfferById(id));
+      dispatch(fetchCommentsByOfferId(id));
     }
   }, [id, dispatch]);
 
@@ -71,7 +72,7 @@ function OfferPage() {
             <div className="offer__gallery">
               {currentOffer.images?.map((url) => (
                 <div key={url} className="offer__image-wrapper">
-                  <img className="offer__image" src={url} alt="Offer image" />
+                  <img className="offer__image" src={url} alt="Offer" />
                 </div>
               ))}
             </div>
@@ -151,7 +152,7 @@ function OfferPage() {
                   <p className="offer__text">{currentOffer.description}</p>
                 </div>
               </div>
-              <ReviewList reviews={[]} />
+              <ReviewList reviews={comments} />
               <ReviewForm />
             </div>
           </div>
