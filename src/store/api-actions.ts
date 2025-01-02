@@ -42,7 +42,6 @@ export const fetchCommentsByOfferId = (offerId: string) => async (
     const { data } = await api.get<Comment[]>(`/comments/${offerId}`);
     dispatch(setComments(data));
   } catch {
-    // handle error if needed
   } finally {
     dispatch(setLoading(false));
   }

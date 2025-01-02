@@ -3,7 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { RootState, AppDispatch } from '../store';
-import { fetchOfferById, fetchCommentsByOfferId, fetchNearbyOffers } from '../store/api-actions';
+import {
+  fetchOfferById,
+  fetchCommentsByOfferId,
+  fetchNearbyOffers
+} from '../store/api-actions';
 import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
 import Map from './Map';
@@ -16,6 +20,7 @@ function OfferPage() {
   const currentOffer = useSelector((state: RootState) => state.currentOffer);
   const comments = useSelector((state: RootState) => state.comments);
   const nearbyOffers = useSelector((state: RootState) => state.nearbyOffers);
+  const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
 
   useEffect(() => {
     async function loadOfferData() {
@@ -162,7 +167,11 @@ function OfferPage() {
                 </div>
               </div>
               <ReviewList reviews={comments} />
-              <ReviewForm />
+              {authorizationStatus === 'AUTH' ? (
+                <ReviewForm />
+              ) : (
+                <p>Please log in to leave a review.</p>
+              )}
             </div>
           </div>
           <section className="offer__map map">
