@@ -1,12 +1,19 @@
-import { Dispatch } from 'redux';
 import { AxiosInstance } from 'axios';
-import { setOffers, setCurrentOffer, setLoading, setAuthorizationStatus, setUser, setComments, setNearbyOffers } from './action';
-import { State } from './reducer';
+import { AppDispatch, RootState } from './index';
+import {
+  setOffers,
+  setCurrentOffer,
+  setLoading,
+  setAuthorizationStatus,
+  setUser,
+  setComments,
+  setNearbyOffers
+} from './action';
 import { Offer, User, Comment } from '../types';
 
 export const fetchOffers = () => async (
-  dispatch: Dispatch,
-  _getState: () => State,
+  dispatch: AppDispatch,
+  getState: () => RootState,
   api: AxiosInstance
 ) => {
   dispatch(setLoading(true));
@@ -15,8 +22,8 @@ export const fetchOffers = () => async (
 };
 
 export const fetchOfferById = (offerId: string) => async (
-  dispatch: Dispatch,
-  _getState: () => State,
+  dispatch: AppDispatch,
+  getState: () => RootState,
   api: AxiosInstance
 ) => {
   dispatch(setLoading(true));
@@ -26,38 +33,39 @@ export const fetchOfferById = (offerId: string) => async (
 };
 
 export const fetchCommentsByOfferId = (offerId: string) => async (
-  dispatch: Dispatch,
-  _getState: () => State,
+  dispatch: AppDispatch,
+  getState: () => RootState,
   api: AxiosInstance
 ) => {
   dispatch(setLoading(true));
   try {
     const { data } = await api.get<Comment[]>(`/comments/${offerId}`);
     dispatch(setComments(data));
-  } catch (error) {
+  } catch {
+    // handle error if needed
   } finally {
     dispatch(setLoading(false));
   }
 };
 
 export const fetchNearbyOffers = (offerId: string) => async (
-  dispatch: Dispatch,
-  _getState: () => State,
+  dispatch: AppDispatch,
+  getState: () => RootState,
   api: AxiosInstance
 ) => {
   dispatch(setLoading(true));
   try {
     const { data } = await api.get<Offer[]>(`/offers/${offerId}/nearby`);
     dispatch(setNearbyOffers(data));
-  } catch (error) {
+  } catch {
   } finally {
     dispatch(setLoading(false));
   }
 };
 
 export const login = () => async (
-  dispatch: Dispatch,
-  _getState: () => State,
+  dispatch: AppDispatch,
+  getState: () => RootState,
   api: AxiosInstance
 ) => {
   dispatch(setLoading(true));
@@ -74,8 +82,8 @@ export const login = () => async (
 };
 
 export const authorize = (email: string, password: string) => async (
-  dispatch: Dispatch,
-  _getState: () => State,
+  dispatch: AppDispatch,
+  getState: () => RootState,
   api: AxiosInstance
 ) => {
   dispatch(setLoading(true));
@@ -87,6 +95,25 @@ export const authorize = (email: string, password: string) => async (
   } catch {
     dispatch(setAuthorizationStatus('NO_AUTH'));
     dispatch(setUser(null));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const postComment = (
+  offerId: string,
+  commentData: { comment: string; rating: number }
+) => async (
+  dispatch: AppDispatch,
+  getState: () => RootState,
+  api: AxiosInstance
+) => {
+  dispatch(setLoading(true));
+  try {
+    await api.post(`/comments/${offerId}`, commentData);
+    dispatch(fetchCommentsByOfferId(offerId));
+  } catch (error) {
+    throw error;
   } finally {
     dispatch(setLoading(false));
   }
