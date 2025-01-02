@@ -22,7 +22,6 @@ function OfferPage() {
   const comments = useSelector((state: RootState) => state.comments);
   const nearbyOffers = useSelector((state: RootState) => state.nearbyOffers);
   const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
-
   const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
@@ -84,9 +83,7 @@ function OfferPage() {
                             style={{ borderRadius: '50%' }}
                           />
                         </div>
-                        <span className="header__user-name user__name">
-                          {user.email}
-                        </span>
+                        <span className="header__user-name user__name">{user.email}</span>
                         <span className="header__favorite-count">3</span>
                       </a>
                     </li>
@@ -140,9 +137,7 @@ function OfferPage() {
                 </span>
               </div>
               <ul className="offer__features">
-                <li className="offer__feature offer__feature--entire">
-                  {currentOffer.type}
-                </li>
+                <li className="offer__feature offer__feature--entire">{currentOffer.type}</li>
                 <li className="offer__feature offer__feature--bedrooms">
                   {currentOffer.bedrooms} Bedrooms
                 </li>
@@ -181,9 +176,7 @@ function OfferPage() {
                         alt="Host avatar"
                       />
                     </div>
-                    <span className="offer__user-name">
-                      {currentOffer.host.name}
-                    </span>
+                    <span className="offer__user-name">{currentOffer.host.name}</span>
                     <span className="offer__user-status">
                       {currentOffer.host.isPro ? 'Pro' : ''}
                     </span>
@@ -193,9 +186,7 @@ function OfferPage() {
                   <p className="offer__text">{currentOffer.description}</p>
                 </div>
               </div>
-
               <ReviewList reviews={comments} />
-
               {authorizationStatus === 'AUTH' ? (
                 <ReviewForm />
               ) : (
@@ -204,7 +195,13 @@ function OfferPage() {
             </div>
           </div>
           <section className="offer__map map">
-            <Map offers={nearbyOffers} />
+            <Map
+              offers={nearbyOffers}
+              centerCoordinates={[
+                currentOffer.location.latitude,
+                currentOffer.location.longitude,
+              ]}
+            />
           </section>
         </section>
         <div className="container">

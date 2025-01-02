@@ -19,6 +19,15 @@ function MainPage() {
   const [sortOption, setSortOption] = useState<SortingOption>('Popular');
   const [hoveredOfferId, setHoveredOfferId] = useState<string | null>(null);
 
+  const cityCoordinates: Record<string, [number, number]> = {
+    Paris: [48.85661, 2.351499],
+    Cologne: [50.938361, 6.959974],
+    Brussels: [50.846557, 4.351697],
+    Amsterdam: [52.37403, 4.88969],
+    Hamburg: [53.550341, 10.000654],
+    Dusseldorf: [51.225402, 6.776314],
+  };
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -41,47 +50,49 @@ function MainPage() {
   }
 
   return (
-    <div className='page page--gray page--main'>
-      <header className='header'>
-        <div className='container'>
-          <div className='header__wrapper'>
-            <div className='header__left'>
-              <a className='header__logo-link header__logo-link--active' href='/'>
+    <div className="page page--gray page--main">
+      <header className="header">
+        <div className="container">
+          <div className="header__wrapper">
+            <div className="header__left">
+              <a className="header__logo-link header__logo-link--active" href="/">
                 <img
-                  className='header__logo'
-                  src='img/logo.svg'
-                  alt='6 cities logo'
-                  width='81'
-                  height='41'
+                  className="header__logo"
+                  src="img/logo.svg"
+                  alt="6 cities logo"
+                  width="81"
+                  height="41"
                 />
               </a>
             </div>
-            <nav className='header__nav'>
-              <ul className='header__nav-list'>
+            <nav className="header__nav">
+              <ul className="header__nav-list">
                 {authorizationStatus !== 'AUTH' && (
-                  <li className='header__nav-item user'>
-                    <a className='header__nav-link header__nav-link--profile' href='/login'>
-                      <div className='header__avatar-wrapper user__avatar-wrapper'></div>
-                      <span className='header__login'>Sign in</span>
+                  <li className="header__nav-item user">
+                    <a className="header__nav-link header__nav-link--profile" href="/login">
+                      <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                      <span className="header__login">Sign in</span>
                     </a>
                   </li>
                 )}
                 {authorizationStatus === 'AUTH' && user && (
                   <>
-                    <li className='header__nav-item user'>
-                      <a className='header__nav-link header__nav-link--profile' href='#'>
-                        <div className='header__avatar-wrapper user__avatar-wrapper'>
-                          <img src={user.avatarUrl} alt={user.name} style={{ borderRadius: '50%' }}/>
+                    <li className="header__nav-item user">
+                      <a className="header__nav-link header__nav-link--profile" href="#">
+                        <div className="header__avatar-wrapper user__avatar-wrapper">
+                          <img
+                            src={user.avatarUrl}
+                            alt={user.name}
+                            style={{ borderRadius: '50%' }}
+                          />
                         </div>
-                        <span className='header__user-name user__name'>
-                          {user.email}
-                        </span>
-                        <span className='header__favorite-count'>3</span>
+                        <span className="header__user-name user__name">{user.email}</span>
+                        <span className="header__favorite-count">3</span>
                       </a>
                     </li>
-                    <li className='header__nav-item'>
-                      <a className='header__nav-link' href='#'>
-                        <span className='header__signout'>Sign out</span>
+                    <li className="header__nav-item">
+                      <a className="header__nav-link" href="#">
+                        <span className="header__signout">Sign out</span>
                       </a>
                     </li>
                   </>
@@ -91,24 +102,32 @@ function MainPage() {
           </div>
         </div>
       </header>
-      <main className='page__main page__main--index'>
-        <h1 className='visually-hidden'>Cities</h1>
-        <div className='tabs'>
-          <section className='locations container'>
-            <CitiesList cities={['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf']} />
+      <main className="page__main page__main--index">
+        <h1 className="visually-hidden">Cities</h1>
+        <div className="tabs">
+          <section className="locations container">
+            <CitiesList
+              cities={['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf']}
+            />
           </section>
         </div>
-        <div className='cities'>
-          <div className='cities__places-container container'>
-            <section className='cities__places places'>
-              <h2 className='visually-hidden'>Places</h2>
-              <b className='places__found'>{sortedOffers.length} places to stay in {currentCity}</b>
+        <div className="cities">
+          <div className="cities__places-container container">
+            <section className="cities__places places">
+              <h2 className="visually-hidden">Places</h2>
+              <b className="places__found">
+                {sortedOffers.length} places to stay in {currentCity}
+              </b>
               <SortingOptions currentSort={sortOption} onSortChange={setSortOption} />
               <OfferList offers={sortedOffers} onOfferHover={setHoveredOfferId} />
             </section>
-            <div className='cities__right-section'>
-              <section className='cities__map map'>
-                <Map offers={sortedOffers} hoveredOfferId={hoveredOfferId} />
+            <div className="cities__right-section">
+              <section className="cities__map map">
+                <Map
+                  offers={sortedOffers}
+                  hoveredOfferId={hoveredOfferId}
+                  centerCoordinates={cityCoordinates[currentCity]}
+                />
               </section>
             </div>
           </div>

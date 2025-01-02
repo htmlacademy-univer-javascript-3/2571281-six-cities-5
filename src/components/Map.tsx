@@ -6,6 +6,7 @@ import { Offer } from '../types';
 interface MapProps {
   offers: Offer[];
   hoveredOfferId?: string | null;
+  centerCoordinates: [number, number];
 }
 
 const defaultIcon = new Icon({
@@ -20,36 +21,31 @@ const activeIcon = new Icon({
   iconAnchor: [20, 40],
 });
 
-function Map({ offers, hoveredOfferId }: MapProps) {
+function Map({ offers, hoveredOfferId, centerCoordinates }: MapProps) {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!mapRef.current) {
       return;
     }
-
     const map = L.map(mapRef.current, {
-      center: [52.38333, 4.9],
+      center: centerCoordinates,
       zoom: 12,
     });
-
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
     const markersLayer = layerGroup().addTo(map);
-
     offers.forEach((offer) => {
       const icon = offer.id === hoveredOfferId ? activeIcon : defaultIcon;
       new Marker([offer.location.latitude, offer.location.longitude])
         .setIcon(icon)
         .addTo(markersLayer);
     });
-
     return () => {
       map.remove();
     };
-  }, [offers, hoveredOfferId]);
+  }, [offers, hoveredOfferId, centerCoordinates]);
 
-  return <div className="cities__map" ref={mapRef} style={{ height: '100%' }}></div>;
+  return <div className="cities__map" ref={mapRef} style={{ height: '100%' }} />;
 }
 
 export default Map;
