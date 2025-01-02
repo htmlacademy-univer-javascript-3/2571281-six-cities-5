@@ -1,33 +1,48 @@
-import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store';
-import { fetchOfferById } from '../store/api-actions';
+import axios from 'axios';
+import { RootState, AppDispatch } from '../store';
+import {
+  fetchOfferById,
+  fetchCommentsByOfferId,
+  fetchNearbyOffers
+} from '../store/api-actions';
 import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
 import Map from './Map';
 import OfferList from './OfferList';
-import { useEffect } from 'react';
-import { AppDispatch } from '../store';
 
 function OfferPage() {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const currentOffer = useSelector((state: RootState) => state.currentOffer);
-  const offers = useSelector((state: RootState) => state.offers);
+  const comments = useSelector((state: RootState) => state.comments);
+  const nearbyOffers = useSelector((state: RootState) => state.nearbyOffers);
+  const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchOfferById(id));
+    async function loadOfferData() {
+      if (!id) {
+        return;
+      }
+      try {
+        await dispatch(fetchOfferById(id));
+        await dispatch(fetchCommentsByOfferId(id));
+        await dispatch(fetchNearbyOffers(id));
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+          navigate('*');
+        }
+      }
     }
-  }, [id, dispatch]);
+    loadOfferData();
+  }, [id, dispatch, navigate]);
 
   if (!currentOffer) {
     return <p>Loading offer details...</p>;
   }
-
-  const nearbyOffers = offers
-    .filter((o) => o.id !== currentOffer.id)
-    .slice(0, 3);
 
   return (
     <div className="page">
@@ -71,7 +86,7 @@ function OfferPage() {
             <div className="offer__gallery">
               {currentOffer.images?.map((url) => (
                 <div key={url} className="offer__image-wrapper">
-                  <img className="offer__image" src={url} alt="Offer image" />
+                  <img className="offer__image" src={url} alt="Offer" />
                 </div>
               ))}
             </div>
@@ -151,8 +166,12 @@ function OfferPage() {
                   <p className="offer__text">{currentOffer.description}</p>
                 </div>
               </div>
-              <ReviewList reviews={[]} />
-              <ReviewForm />
+              <ReviewList reviews={comments} />
+              {authorizationStatus === 'AUTH' ? (
+                <ReviewForm />
+              ) : (
+                <p>Please log in to leave a review.</p>
+              )}
             </div>
           </div>
           <section className="offer__map map">

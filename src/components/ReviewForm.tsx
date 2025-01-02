@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../store';
+import { postComment } from '../store/api-actions';
+import { useParams } from 'react-router-dom';
 
 function ReviewForm() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { id } = useParams<{ id: string }>();
   const [rating, setRating] = useState<number | null>(null);
-  const [review, setReview] = useState<string>('');
+  const [review, setReview] = useState('');
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+  const [isFormDisabled, setIsFormDisabled] = useState(false);
+  const [error, setError] = useState('');
 
-  const validateForm = (newReview: string, newRating: number | null) => {
-    const isReviewValid = newReview.length >= 50;
-    const isRatingValid = newRating !== null;
+  const validateForm = (text: string, currentRating: number | null) => {
+    const isReviewValid = text.length >= 50 && text.length <= 300;
+    const isRatingValid = currentRating !== null;
     setIsSubmitDisabled(!(isReviewValid && isRatingValid));
   };
 
@@ -18,17 +26,30 @@ function ReviewForm() {
   };
 
   const handleReviewChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newReview = event.target.value;
-    setReview(newReview);
-    validateForm(newReview, rating);
+    const text = event.target.value;
+    setReview(text);
+    validateForm(text, rating);
   };
-
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setRating(null);
-    setReview('');
-    setIsSubmitDisabled(true);
+    (async () => {
+      if (!id || rating === null) {
+        return;
+      }
+      setIsFormDisabled(true);
+      setError('');
+      try {
+        await dispatch(postComment(id, { comment: review, rating }));
+        setRating(null);
+        setReview('');
+        setIsSubmitDisabled(true);
+      } catch {
+        setError('Error. Please try again.');
+      } finally {
+        setIsFormDisabled(false);
+      }
+    })();
   };
 
   const getRatingTitle = (star: number) => {
@@ -62,6 +83,7 @@ function ReviewForm() {
               type="radio"
               checked={rating === star}
               onChange={handleRatingChange}
+              disabled={isFormDisabled}
             />
             <label
               htmlFor={`${star}-stars`}
@@ -82,12 +104,18 @@ function ReviewForm() {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={review}
         onChange={handleReviewChange}
+        disabled={isFormDisabled}
       />
       <div className="reviews__button-wrapper">
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled={isSubmitDisabled}>
+        <button
+          className="reviews__submit form__submit button"
+          type="submit"
+          disabled={isSubmitDisabled || isFormDisabled}
+        >
           Submit
         </button>
       </div>
