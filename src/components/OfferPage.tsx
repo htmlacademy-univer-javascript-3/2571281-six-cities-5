@@ -12,6 +12,7 @@ import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
 import Map from './Map';
 import OfferList from './OfferList';
+import { Link } from 'react-router-dom';
 
 function OfferPage() {
   const { id } = useParams<{ id: string }>();
@@ -77,7 +78,7 @@ function OfferPage() {
                 {authorizationStatus === 'AUTH' && user && (
                   <>
                     <li className="header__nav-item user">
-                      <a className="header__nav-link header__nav-link--profile" href="#">
+                      <Link className="header__nav-link header__nav-link--profile" to="/favorites">
                         <div className="header__avatar-wrapper user__avatar-wrapper">
                           <img
                             src={user.avatarUrl}
@@ -87,7 +88,7 @@ function OfferPage() {
                         </div>
                         <span className="header__user-name user__name">{user.email}</span>
                         <span className="header__favorite-count">3</span>
-                      </a>
+                      </Link>
                     </li>
                     <li className="header__nav-item">
                       <a className="header__nav-link" href="#">
