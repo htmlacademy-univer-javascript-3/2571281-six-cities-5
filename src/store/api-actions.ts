@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { AxiosInstance } from 'axios';
-import { setOffers, setCurrentOffer, setLoading, setAuthorizationStatus, setUser, setComments } from './action';
+import { setOffers, setCurrentOffer, setLoading, setAuthorizationStatus, setUser, setComments, setNearbyOffers } from './action';
 import { State } from './reducer';
 import { Offer, User, Comment } from '../types';
 
@@ -40,6 +40,20 @@ export const fetchCommentsByOfferId = (offerId: string) => async (
   }
 };
 
+export const fetchNearbyOffers = (offerId: string) => async (
+  dispatch: Dispatch,
+  _getState: () => State,
+  api: AxiosInstance
+) => {
+  dispatch(setLoading(true));
+  try {
+    const { data } = await api.get<Offer[]>(`/offers/${offerId}/nearby`);
+    dispatch(setNearbyOffers(data));
+  } catch (error) {
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
 
 export const login = () => async (
   dispatch: Dispatch,

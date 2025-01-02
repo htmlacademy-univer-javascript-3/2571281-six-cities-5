@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
-import { fetchOfferById, fetchCommentsByOfferId } from '../store/api-actions';
+import { fetchOfferById, fetchCommentsByOfferId, fetchNearbyOffers } from '../store/api-actions';
 import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
 import Map from './Map';
@@ -13,22 +13,19 @@ function OfferPage() {
   const dispatch = useDispatch<AppDispatch>();
   const currentOffer = useSelector((state: RootState) => state.currentOffer);
   const comments = useSelector((state: RootState) => state.comments);
-  const offers = useSelector((state: RootState) => state.offers);
+  const nearbyOffers = useSelector((state: RootState) => state.nearbyOffers);
 
   useEffect(() => {
     if (id) {
       dispatch(fetchOfferById(id));
       dispatch(fetchCommentsByOfferId(id));
+      dispatch(fetchNearbyOffers(id));
     }
   }, [id, dispatch]);
 
   if (!currentOffer) {
     return <p>Loading offer details...</p>;
   }
-
-  const nearbyOffers = offers
-    .filter((o) => o.id !== currentOffer.id)
-    .slice(0, 3);
 
   return (
     <div className="page">

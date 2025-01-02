@@ -35,6 +35,11 @@ export const setComments = (comments: Comment[]) => ({
   payload: comments
 });
 
+export const setNearbyOffers = (offers: Offer[]) => ({
+  type: 'setNearbyOffers' as const,
+  payload: offers
+});
+
 export type Actions =
   | ReturnType<typeof setCity>
   | ReturnType<typeof setOffers>
@@ -42,4 +47,5 @@ export type Actions =
   | ReturnType<typeof setLoading>
   | ReturnType<typeof setAuthorizationStatus>
   | ReturnType<typeof setUser>
-  | ReturnType<typeof setComments>;
+  | ReturnType<typeof setComments>
+  | ReturnType<typeof setNearbyOffers>;
