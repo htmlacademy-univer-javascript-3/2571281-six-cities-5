@@ -196,11 +196,9 @@ function OfferPage() {
           </div>
           <section className="offer__map map">
             <Map
-              offers={nearbyOffers}
-              centerCoordinates={[
-                currentOffer.location.latitude,
-                currentOffer.location.longitude,
-              ]}
+              offers={[currentOffer, ...nearbyOffers.slice(0, 3)]}
+              centerCoordinates={[currentOffer.location.latitude, currentOffer.location.longitude]}
+              currentOfferId={currentOffer.id}
             />
           </section>
         </section>

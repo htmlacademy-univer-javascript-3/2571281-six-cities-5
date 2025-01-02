@@ -5,8 +5,9 @@ import { Offer } from '../types';
 
 interface MapProps {
   offers: Offer[];
-  hoveredOfferId?: string | null;
   centerCoordinates: [number, number];
+  hoveredOfferId?: string;
+  currentOfferId?: string;
 }
 
 const defaultIcon = new Icon({
@@ -15,13 +16,18 @@ const defaultIcon = new Icon({
   iconAnchor: [20, 40],
 });
 
-const activeIcon = new Icon({
+const highlightedIcon = new Icon({
   iconUrl: 'img/pin-active.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
 
-function Map({ offers, hoveredOfferId, centerCoordinates }: MapProps) {
+function Map({
+  offers,
+  centerCoordinates,
+  hoveredOfferId,
+  currentOfferId,
+}: MapProps) {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -35,7 +41,10 @@ function Map({ offers, hoveredOfferId, centerCoordinates }: MapProps) {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
     const markersLayer = layerGroup().addTo(map);
     offers.forEach((offer) => {
-      const icon = offer.id === hoveredOfferId ? activeIcon : defaultIcon;
+      const icon =
+        offer.id === hoveredOfferId || offer.id === currentOfferId
+          ? highlightedIcon
+          : defaultIcon;
       new Marker([offer.location.latitude, offer.location.longitude])
         .setIcon(icon)
         .addTo(markersLayer);
@@ -43,9 +52,9 @@ function Map({ offers, hoveredOfferId, centerCoordinates }: MapProps) {
     return () => {
       map.remove();
     };
-  }, [offers, hoveredOfferId, centerCoordinates]);
+  }, [offers, centerCoordinates, hoveredOfferId, currentOfferId]);
 
-  return <div className="cities__map" ref={mapRef} style={{ height: '100%' }} />;
+  return <div ref={mapRef} style={{ height: '100%' }} />;
 }
 
 export default Map;
