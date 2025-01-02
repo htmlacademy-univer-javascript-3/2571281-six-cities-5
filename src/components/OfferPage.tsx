@@ -46,6 +46,8 @@ function OfferPage() {
     return <p>Loading offer details...</p>;
   }
 
+  const nearbyToDisplay = nearbyOffers.slice(0, 3);
+
   return (
     <div className="page">
       <header className="header">
@@ -162,25 +164,27 @@ function OfferPage() {
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>
                 {currentOffer.host && (
-                  <div className="offer__host-user user">
-                    <div
-                      className={`offer__avatar-wrapper user__avatar-wrapper ${
-                        currentOffer.host.isPro ? 'offer__avatar-wrapper--pro' : ''
-                      }`}
-                    >
-                      <img
-                        className="offer__avatar user__avatar"
-                        src={currentOffer.host.avatarUrl}
-                        width="74"
-                        height="74"
-                        alt="Host avatar"
-                      />
-                    </div>
+                  <div
+                    className={`offer__avatar-wrapper user__avatar-wrapper ${
+                      currentOffer.host.isPro ? 'offer__avatar-wrapper--pro' : ''
+                    }`}
+                  >
+                    <img
+                      className="offer__avatar user__avatar"
+                      src={currentOffer.host.avatarUrl}
+                      width="74"
+                      height="74"
+                      alt="Host avatar"
+                    />
+                  </div>
+                )}
+                {currentOffer.host && (
+                  <>
                     <span className="offer__user-name">{currentOffer.host.name}</span>
                     <span className="offer__user-status">
                       {currentOffer.host.isPro ? 'Pro' : ''}
                     </span>
-                  </div>
+                  </>
                 )}
                 <div className="offer__description">
                   <p className="offer__text">{currentOffer.description}</p>
@@ -196,8 +200,11 @@ function OfferPage() {
           </div>
           <section className="offer__map map">
             <Map
-              offers={[currentOffer, ...nearbyOffers.slice(0, 3)]}
-              centerCoordinates={[currentOffer.location.latitude, currentOffer.location.longitude]}
+              offers={[currentOffer, ...nearbyToDisplay]}
+              centerCoordinates={[
+                currentOffer.location.latitude,
+                currentOffer.location.longitude,
+              ]}
               currentOfferId={currentOffer.id}
             />
           </section>
@@ -205,7 +212,7 @@ function OfferPage() {
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <OfferList offers={nearbyOffers} />
+            <OfferList offers={nearbyToDisplay} />
           </section>
         </div>
       </main>
