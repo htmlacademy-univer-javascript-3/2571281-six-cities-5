@@ -7,6 +7,7 @@ import { logout } from '../store/api-actions';
 function Header() {
   const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
   const user = useSelector((state: RootState) => state.user);
+  const favorites = useSelector((state: RootState) => state.favorites);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -15,6 +16,8 @@ function Header() {
     dispatch(logout());
     navigate('/');
   };
+
+  const favoritesCount = favorites.length;
 
   return (
     <header className="header">
@@ -35,10 +38,10 @@ function Header() {
             <ul className="header__nav-list">
               {authorizationStatus !== 'AUTH' && (
                 <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="/login">
+                  <Link className="header__nav-link header__nav-link--profile" to="/login">
                     <div className="header__avatar-wrapper user__avatar-wrapper" />
                     <span className="header__login">Sign in</span>
-                  </a>
+                  </Link>
                 </li>
               )}
               {authorizationStatus === 'AUTH' && user && (
@@ -53,7 +56,7 @@ function Header() {
                         />
                       </div>
                       <span className="header__user-name user__name">{user.email}</span>
-                      <span className="header__favorite-count">3</span>
+                      <span className="header__favorite-count">{favoritesCount}</span>
                     </Link>
                   </li>
                   <li className="header__nav-item">
