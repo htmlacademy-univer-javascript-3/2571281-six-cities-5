@@ -107,3 +107,19 @@ export const postComment = (
     dispatch(setLoading(false));
   }
 };
+
+export const logout = () => async (
+  dispatch: AppDispatch,
+  _getState: () => RootState,
+  api: AxiosInstance
+) => {
+  dispatch(setLoading(true));
+  try {
+    await api.delete('/logout');
+  } finally {
+    dispatch(setLoading(false));
+    dispatch(setUser(null));
+    dispatch(setAuthorizationStatus('NO_AUTH'));
+    delete api.defaults.headers.common['X-Token'];
+  }
+};

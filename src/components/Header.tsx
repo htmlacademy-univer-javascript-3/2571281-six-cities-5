@@ -1,10 +1,18 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../store';
+import { logout } from '../store/api-actions';
 
 function Header() {
   const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
   const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleSignOutClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    dispatch(logout());
+  };
 
   return (
     <header className="header">
@@ -47,7 +55,7 @@ function Header() {
                     </Link>
                   </li>
                   <li className="header__nav-item">
-                    <a className="header__nav-link" href="#">
+                    <a className="header__nav-link" href="#" onClick={handleSignOutClick}>
                       <span className="header__signout">Sign out</span>
                     </a>
                   </li>
