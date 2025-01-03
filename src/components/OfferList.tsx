@@ -1,15 +1,16 @@
 import OfferCard from './OfferCard';
 import { Offer } from '../types';
 
-interface OfferListProps {
+type OfferListProps = {
   offers: Offer[];
-  onOfferHover?: (id: string | null) => void;
-}
+  onFavoriteToggle?: (offerId: string, isCurrentlyFavorite: boolean) => void;
+  onOfferHover?: (offerId: string | null) => void;
+};
 
-function OfferList({ offers, onOfferHover }: OfferListProps) {
-  const handleMouseEnter = (offerId: string) => {
+function OfferList({ offers, onFavoriteToggle, onOfferHover }: OfferListProps) {
+  const handleMouseEnter = (id: string) => {
     if (onOfferHover) {
-      onOfferHover(offerId);
+      onOfferHover(id);
     }
   };
 
@@ -20,14 +21,17 @@ function OfferList({ offers, onOfferHover }: OfferListProps) {
   };
 
   return (
-    <div className="cities__places-list places__list tabs__content">
+    <div className="places__list cities__places-list">
       {offers.map((offer) => (
         <div
           key={offer.id}
           onMouseEnter={() => handleMouseEnter(offer.id)}
           onMouseLeave={handleMouseLeave}
         >
-          <OfferCard offer={offer} />
+          <OfferCard
+            offer={offer}
+            onFavoriteToggle={onFavoriteToggle}
+          />
         </div>
       ))}
     </div>

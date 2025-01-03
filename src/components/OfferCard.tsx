@@ -1,14 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../store';
+import { RootState, AppDispatch } from '../store';
 import { toggleFavorite } from '../store/api-actions';
 import { Offer } from '../types';
 
-interface OfferCardProps {
+type OfferCardProps = {
   offer: Offer;
-}
+  onFavoriteToggle?: (offerId: string, isCurrentlyFavorite: boolean) => void;
+};
 
-function OfferCard({ offer }: OfferCardProps) {
+function OfferCard({ offer, onFavoriteToggle }: OfferCardProps) {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
@@ -18,7 +19,11 @@ function OfferCard({ offer }: OfferCardProps) {
       navigate('/login');
       return;
     }
-    dispatch(toggleFavorite(offer.id, offer.isFavorite));
+    if (onFavoriteToggle) {
+      onFavoriteToggle(offer.id, offer.isFavorite);
+    } else {
+      dispatch(toggleFavorite(offer.id, offer.isFavorite));
+    }
   };
 
   return (
@@ -53,7 +58,7 @@ function OfferCard({ offer }: OfferCardProps) {
             onClick={handleBookmarkClick}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
+              <use xlinkHref="#icon-bookmark" />
             </svg>
             <span className="visually-hidden">
               {offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}

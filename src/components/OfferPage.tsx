@@ -46,12 +46,32 @@ function OfferPage() {
     return <p>Loading offer details...</p>;
   }
 
-  const handleBookmarkClick = () => {
+  const handleMainBookmarkClick = () => {
     if (authorizationStatus !== 'AUTH') {
       navigate('/login');
       return;
     }
-    dispatch(toggleFavorite(currentOffer.id, currentOffer.isFavorite));
+    dispatch(toggleFavorite(currentOffer.id, currentOffer.isFavorite))
+      .then(() => {
+        if (id) {
+          dispatch(fetchOfferById(id));
+          dispatch(fetchNearbyOffers(id));
+        }
+      });
+  };
+
+  const handleNearbyFavoriteToggle = (offerId: string, isCurrentlyFavorite: boolean) => {
+    if (authorizationStatus !== 'AUTH') {
+      navigate('/login');
+      return;
+    }
+    dispatch(toggleFavorite(offerId, isCurrentlyFavorite))
+      .then(() => {
+        if (id) {
+          dispatch(fetchOfferById(id));
+          dispatch(fetchNearbyOffers(id));
+        }
+      });
   };
 
   const nearbyToDisplay = nearbyOffers.slice(0, 3);
@@ -84,7 +104,7 @@ function OfferPage() {
                     currentOffer.isFavorite ? 'offer__bookmark-button--active' : ''
                   }`}
                   type="button"
-                  onClick={handleBookmarkClick}
+                  onClick={handleMainBookmarkClick}
                 >
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark" />
@@ -166,10 +186,7 @@ function OfferPage() {
           <section className="offer__map map">
             <Map
               offers={[currentOffer, ...nearbyToDisplay]}
-              centerCoordinates={[
-                currentOffer.location.latitude,
-                currentOffer.location.longitude,
-              ]}
+              centerCoordinates={[currentOffer.location.latitude, currentOffer.location.longitude]}
               currentOfferId={currentOffer.id}
             />
           </section>
@@ -177,7 +194,10 @@ function OfferPage() {
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <OfferList offers={nearbyToDisplay} />
+            <OfferList
+              offers={nearbyToDisplay}
+              onFavoriteToggle={handleNearbyFavoriteToggle}
+            />
           </section>
         </div>
       </main>
