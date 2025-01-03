@@ -1,14 +1,22 @@
-import { FormEvent, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { FormEvent, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { RootState, AppDispatch } from '../store';
 import { authorize } from '../store/api-actions';
-import { AppDispatch } from '../store';
 
 function LoginPage() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
+
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (authorizationStatus === 'AUTH') {
+      navigate('/');
+    }
+  }, [authorizationStatus, navigate]);
 
   const handleSubmit = (evt: FormEvent) => {
     evt.preventDefault();
@@ -46,10 +54,11 @@ function LoginPage() {
             <h1 className="login__title">Sign in</h1>
             <form className="login__form form" onSubmit={handleSubmit} action="#" method="post">
               <div className="login__input-wrapper form__input-wrapper">
-                <label className="visually-hidden">E-mail</label>
+                <label className="visually-hidden" htmlFor="login-email">E-mail</label>
                 <input
                   ref={emailRef}
                   className="login__input form__input"
+                  id="login-email"
                   type="email"
                   name="email"
                   placeholder="Email"
@@ -57,14 +66,17 @@ function LoginPage() {
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
-                <label className="visually-hidden">Password</label>
+                <label className="visually-hidden" htmlFor="login-password">Password</label>
                 <input
                   ref={passwordRef}
                   className="login__input form__input"
+                  id="login-password"
                   type="password"
                   name="password"
                   placeholder="Password"
                   required
+                  pattern="^(?=.*[0-9])(?=.*[A-Za-z]).+$"
+                  title="Password must contain at least one letter and one digit"
                 />
               </div>
               <button className="login__submit form__submit button" type="submit">
