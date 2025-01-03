@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { logout } from '../store/api-actions';
@@ -8,10 +8,12 @@ function Header() {
   const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const handleSignOutClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
     dispatch(logout());
+    navigate('/');
   };
 
   return (
