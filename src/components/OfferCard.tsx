@@ -1,3 +1,4 @@
+
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
@@ -25,6 +26,9 @@ function OfferCard({ offer, onFavoriteToggle }: OfferCardProps) {
       dispatch(toggleFavorite(offer.id, offer.isFavorite));
     }
   };
+
+  const starCount = Math.round(offer.rating);
+  const starWidth = starCount * 20;
 
   return (
     <article className="cities__card place-card">
@@ -58,7 +62,7 @@ function OfferCard({ offer, onFavoriteToggle }: OfferCardProps) {
             onClick={handleBookmarkClick}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark" />
+              <use xlinkHref="#icon-bookmark"></use>
             </svg>
             <span className="visually-hidden">
               {offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}
@@ -67,7 +71,7 @@ function OfferCard({ offer, onFavoriteToggle }: OfferCardProps) {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${offer.rating}%` }}></span>
+            <span style={{ width: `${starWidth}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

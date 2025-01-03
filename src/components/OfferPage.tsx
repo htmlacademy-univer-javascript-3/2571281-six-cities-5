@@ -76,6 +76,10 @@ function OfferPage() {
 
   const nearbyToDisplay = nearbyOffers.slice(0, 3);
 
+  const starCount = Math.round(currentOffer.rating);
+  const starWidth = starCount * 20;
+  const numericLabel = currentOffer.rating.toFixed(1);
+
   return (
     <div className="page">
       <Header />
@@ -116,11 +120,11 @@ function OfferPage() {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{ width: `${currentOffer.rating}%` }} />
+                  <span style={{ width: `${starWidth}%` }} />
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">
-                  {(currentOffer.rating / 20).toFixed(1)}
+                  {numericLabel}
                 </span>
               </div>
               <ul className="offer__features">
@@ -186,7 +190,10 @@ function OfferPage() {
           <section className="offer__map map">
             <Map
               offers={[currentOffer, ...nearbyToDisplay]}
-              centerCoordinates={[currentOffer.location.latitude, currentOffer.location.longitude]}
+              centerCoordinates={[
+                currentOffer.location.latitude,
+                currentOffer.location.longitude,
+              ]}
               currentOfferId={currentOffer.id}
             />
           </section>
