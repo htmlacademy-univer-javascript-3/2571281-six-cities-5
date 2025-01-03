@@ -1,6 +1,7 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../store';
+import { fetchOffers } from '../store/api-actions';
 import CitiesList from './CitiesList';
 import OfferList from './OfferList';
 import Map from './Map';
@@ -11,20 +12,16 @@ import Header from './Header';
 type SortingOption = 'Popular' | 'Price: low to high' | 'Price: high to low' | 'Top rated first';
 
 function MainPage() {
+  const dispatch = useDispatch<AppDispatch>();
   const currentCity = useSelector((state: RootState) => state.city);
   const allOffers = useSelector((state: RootState) => state.offers);
   const isLoading = useSelector((state: RootState) => state.isLoading);
   const [sortOption, setSortOption] = useState<SortingOption>('Popular');
   const [hoveredOfferId, setHoveredOfferId] = useState<string | null>(null);
 
-  const cityCoordinates: Record<string, [number, number]> = {
-    Paris: [48.85661, 2.351499],
-    Cologne: [50.938361, 6.959974],
-    Brussels: [50.846557, 4.351697],
-    Amsterdam: [52.37403, 4.88969],
-    Hamburg: [53.550341, 10.000654],
-    Dusseldorf: [51.225402, 6.776314],
-  };
+  useEffect(() => {
+    dispatch(fetchOffers());
+  }, [dispatch]);
 
   if (isLoading) {
     return <Spinner />;
@@ -74,7 +71,7 @@ function MainPage() {
                 <Map
                   offers={sortedOffers}
                   hoveredOfferId={hoveredOfferId || undefined}
-                  centerCoordinates={cityCoordinates[currentCity]}
+                  centerCoordinates={[48.85661, 2.351499]}
                 />
               </section>
             </div>

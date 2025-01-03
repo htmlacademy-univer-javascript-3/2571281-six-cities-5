@@ -9,7 +9,6 @@ import {
   setComments,
   setNearbyOffers,
   setFavorites,
-  updateOffer
 } from './action';
 import { Offer, User, Comment } from '../types';
 
@@ -123,8 +122,10 @@ export const logout = () => async (
     dispatch(setUser(null));
     dispatch(setAuthorizationStatus('NO_AUTH'));
     delete api.defaults.headers.common['X-Token'];
+    dispatch(fetchOffers());
   }
 };
+
 
 export const fetchFavorites = () => async (
   dispatch: AppDispatch,
@@ -148,9 +149,11 @@ export const toggleFavorite = (offerId: string, isFavorite: boolean) => async (
   dispatch(setLoading(true));
   try {
     const status = isFavorite ? 0 : 1;
-    const { data } = await api.post<Offer>(`/favorite/${offerId}/${status}`);
-    dispatch(updateOffer(data));
+    await api.post<Offer>(`/favorite/${offerId}/${status}`);
+    dispatch(fetchOffers());
+    dispatch(fetchFavorites());
   } finally {
     dispatch(setLoading(false));
   }
 };
+
