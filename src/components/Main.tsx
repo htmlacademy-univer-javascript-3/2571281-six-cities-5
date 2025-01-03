@@ -19,6 +19,15 @@ function MainPage() {
   const [sortOption, setSortOption] = useState<SortingOption>('Popular');
   const [hoveredOfferId, setHoveredOfferId] = useState<string | null>(null);
 
+  const cityCoordinates: Record<string, [number, number]> = {
+    Paris: [48.85661, 2.351499],
+    Cologne: [50.938361, 6.959974],
+    Brussels: [50.846557, 4.351697],
+    Amsterdam: [52.37403, 4.88969],
+    Hamburg: [53.550341, 10.000654],
+    Dusseldorf: [51.225402, 6.776314],
+  };
+
   useEffect(() => {
     dispatch(fetchOffers());
   }, [dispatch]);
@@ -71,7 +80,7 @@ function MainPage() {
                 <Map
                   offers={sortedOffers}
                   hoveredOfferId={hoveredOfferId || undefined}
-                  centerCoordinates={[48.85661, 2.351499]}
+                  centerCoordinates={cityCoordinates[currentCity]}
                 />
               </section>
             </div>
