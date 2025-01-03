@@ -4,6 +4,18 @@ import { RootState, AppDispatch } from '../store';
 import { fetchFavorites } from '../store/api-actions';
 import OfferCard from './OfferCard';
 import Header from './Header';
+import { Offer } from '../types';
+
+function groupOffersByCity(offers: Offer[]) {
+  return offers.reduce<Record<string, Offer[]>>((acc, offer) => {
+    const cityName = offer.city.name;
+    if (!acc[cityName]) {
+      acc[cityName] = [];
+    }
+    acc[cityName].push(offer);
+    return acc;
+  }, {});
+}
 
 function FavoritesPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -13,6 +25,9 @@ function FavoritesPage() {
     dispatch(fetchFavorites());
   }, [dispatch]);
 
+  const groupedFavorites = groupOffersByCity(favorites);
+  const cityNames = Object.keys(groupedFavorites);
+
   return (
     <div className="page">
       <Header />
@@ -20,26 +35,32 @@ function FavoritesPage() {
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            <ul className="favorites__list">
-              {favorites.length > 0 ? (
-                favorites.map((offer) => (
-                  <li key={offer.id} className="favorites__locations-items">
-                    <div className="favorites__locations locations locations--current">
-                      <div className="locations__item">
-                        <a className="locations__item-link" href="#">
-                          <span>{offer.city.name}</span>
-                        </a>
+            {cityNames.length === 0 && (
+              <p>Nothing yet saved.</p>
+            )}
+            {cityNames.map((city) => (
+              <div key={city}>
+                <div className="favorites__locations locations locations--current">
+                  <div className="locations__item">
+                    <div className="locations__item-link">
+                      <span>{city}</span>
+                    </div>
+                  </div>
+                </div>
+                <ul className="favorites__list">
+                  {groupedFavorites[city].map((offer) => (
+                    <li
+                      key={offer.id}
+                      className="favorites__locations-items"
+                    >
+                      <div className="favorites__places">
+                        <OfferCard offer={offer} />
                       </div>
-                    </div>
-                    <div className="favorites__places">
-                      <OfferCard offer={offer} />
-                    </div>
-                  </li>
-                ))
-              ) : (
-                <p>No saved listings.</p>
-              )}
-            </ul>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </section>
         </div>
       </main>

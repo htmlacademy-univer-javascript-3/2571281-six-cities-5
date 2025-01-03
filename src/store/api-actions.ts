@@ -142,7 +142,7 @@ export const fetchFavorites = () => async (
 
 export const toggleFavorite = (offerId: string, isFavorite: boolean) => async (
   dispatch: AppDispatch,
-  getState: () => RootState,
+  _getState: () => RootState,
   api: AxiosInstance
 ) => {
   dispatch(setLoading(true));
