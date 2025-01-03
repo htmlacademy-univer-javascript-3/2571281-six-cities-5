@@ -6,7 +6,7 @@ import CitiesList from '../components/cities-list';
 import OfferList from '../components/offer-list';
 import Map from '../components/map';
 import SortingOptions from '../components/sorting-options';
-import Spinner from '../spinner/Spinner';
+import Spinner from '../components/spinner/spinner';
 import Header from '../components/header';
 
 type SortingOption = 'Popular' | 'Price: low to high' | 'Price: high to low' | 'Top rated first';
