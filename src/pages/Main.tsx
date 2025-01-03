@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { fetchOffers } from '../store/api-actions';
-import CitiesList from '../components/CitiesList';
-import OfferList from '../components/OfferList';
-import Map from '../components/Map';
-import SortingOptions from '../components/SortingOptions';
+import CitiesList from '../components/cities-list';
+import OfferList from '../components/offer-list';
+import Map from '../components/map';
+import SortingOptions from '../components/sorting-options';
 import Spinner from '../spinner/Spinner';
-import Header from '../components/Header';
+import Header from '../components/header';
 
 type SortingOption = 'Popular' | 'Price: low to high' | 'Price: high to low' | 'Top rated first';
 

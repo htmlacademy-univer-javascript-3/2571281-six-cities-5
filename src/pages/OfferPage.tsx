@@ -9,11 +9,11 @@ import {
   fetchNearbyOffers,
   toggleFavorite
 } from '../store/api-actions';
-import ReviewList from '../components/ReviewList';
-import ReviewForm from '../components/ReviewForm';
-import Map from '../components/Map';
-import OfferList from '../components/OfferList';
-import Header from '../components/Header';
+import ReviewList from '../components/review-list';
+import ReviewForm from '../components/review-form';
+import Map from '../components/map';
+import OfferList from '../components/offer-list';
+import Header from '../components/header';
 
 function OfferPage() {
   const { id } = useParams<{ id: string }>();
