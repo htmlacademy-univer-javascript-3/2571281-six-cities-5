@@ -40,6 +40,16 @@ export const setNearbyOffers = (offers: Offer[]) => ({
   payload: offers
 });
 
+export const setFavorites = (offers: Offer[]) => ({
+  type: 'setFavorites' as const,
+  payload: offers
+});
+
+export const updateOffer = (offer: Offer) => ({
+  type: 'updateOffer' as const,
+  payload: offer
+});
+
 export type Actions =
   | ReturnType<typeof setCity>
   | ReturnType<typeof setOffers>
@@ -48,4 +58,6 @@ export type Actions =
   | ReturnType<typeof setAuthorizationStatus>
   | ReturnType<typeof setUser>
   | ReturnType<typeof setComments>
-  | ReturnType<typeof setNearbyOffers>;
+  | ReturnType<typeof setNearbyOffers>
+  | ReturnType<typeof setFavorites>
+  | ReturnType<typeof updateOffer>;

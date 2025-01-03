@@ -10,14 +10,13 @@ export type Comment = {
   rating: number;
 };
 
-
 export type User = {
     name: string;
     avatarUrl: string;
     isPro: boolean;
     email: string;
     token: string;
-  };
+};
 
 export type Offer = {
     id: string;
@@ -53,6 +52,6 @@ export type Offer = {
     };
     images?: string[];
     maxAdults?: number;
-  };
+};
 
 

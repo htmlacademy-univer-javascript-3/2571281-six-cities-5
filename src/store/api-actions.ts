@@ -7,7 +7,8 @@ import {
   setAuthorizationStatus,
   setUser,
   setComments,
-  setNearbyOffers
+  setNearbyOffers,
+  setFavorites,
 } from './action';
 import { Offer, User, Comment } from '../types';
 
@@ -107,3 +108,52 @@ export const postComment = (
     dispatch(setLoading(false));
   }
 };
+
+export const logout = () => async (
+  dispatch: AppDispatch,
+  _getState: () => RootState,
+  api: AxiosInstance
+) => {
+  dispatch(setLoading(true));
+  try {
+    await api.delete('/logout');
+  } finally {
+    dispatch(setLoading(false));
+    dispatch(setUser(null));
+    dispatch(setAuthorizationStatus('NO_AUTH'));
+    delete api.defaults.headers.common['X-Token'];
+    dispatch(fetchOffers());
+  }
+};
+
+
+export const fetchFavorites = () => async (
+  dispatch: AppDispatch,
+  _getState: () => RootState,
+  api: AxiosInstance
+) => {
+  dispatch(setLoading(true));
+  try {
+    const { data } = await api.get<Offer[]>('/favorite');
+    dispatch(setFavorites(data));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const toggleFavorite = (offerId: string, isFavorite: boolean) => async (
+  dispatch: AppDispatch,
+  _getState: () => RootState,
+  api: AxiosInstance
+) => {
+  dispatch(setLoading(true));
+  try {
+    const status = isFavorite ? 0 : 1;
+    await api.post<Offer>(`/favorite/${offerId}/${status}`);
+    dispatch(fetchOffers());
+    dispatch(fetchFavorites());
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+

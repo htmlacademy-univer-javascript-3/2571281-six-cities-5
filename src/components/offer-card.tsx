@@ -1,11 +1,35 @@
-import { Link } from 'react-router-dom';
+
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../store';
+import { toggleFavorite } from '../store/api-actions';
 import { Offer } from '../types';
 
-interface OfferCardProps {
+type OfferCardProps = {
   offer: Offer;
-}
+  onFavoriteToggle?: (offerId: string, isCurrentlyFavorite: boolean) => void;
+};
 
-function OfferCard({ offer }: OfferCardProps) {
+function OfferCard({ offer, onFavoriteToggle }: OfferCardProps) {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
+
+  const handleBookmarkClick = () => {
+    if (authorizationStatus !== 'AUTH') {
+      navigate('/login');
+      return;
+    }
+    if (onFavoriteToggle) {
+      onFavoriteToggle(offer.id, offer.isFavorite);
+    } else {
+      dispatch(toggleFavorite(offer.id, offer.isFavorite));
+    }
+  };
+
+  const starCount = Math.round(offer.rating);
+  const starWidth = starCount * 20;
+
   return (
     <article className="cities__card place-card">
       {offer.isPremium && (
@@ -35,12 +59,9 @@ function OfferCard({ offer }: OfferCardProps) {
               offer.isFavorite ? 'place-card__bookmark-button--active' : ''
             }`}
             type="button"
+            onClick={handleBookmarkClick}
           >
-            <svg
-              className="place-card__bookmark-icon"
-              width="18"
-              height="19"
-            >
+            <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
             <span className="visually-hidden">
@@ -50,7 +71,7 @@ function OfferCard({ offer }: OfferCardProps) {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${offer.rating}%` }}></span>
+            <span style={{ width: `${starWidth}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

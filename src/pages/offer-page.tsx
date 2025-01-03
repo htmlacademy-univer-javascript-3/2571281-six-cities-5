@@ -6,12 +6,14 @@ import { RootState, AppDispatch } from '../store';
 import {
   fetchOfferById,
   fetchCommentsByOfferId,
-  fetchNearbyOffers
+  fetchNearbyOffers,
+  toggleFavorite
 } from '../store/api-actions';
-import ReviewList from './ReviewList';
-import ReviewForm from './ReviewForm';
-import Map from './Map';
-import OfferList from './OfferList';
+import ReviewList from '../components/review-list';
+import ReviewForm from '../components/review-form';
+import Map from '../components/map';
+import OfferList from '../components/offer-list';
+import Header from '../components/header';
 
 function OfferPage() {
   const { id } = useParams<{ id: string }>();
@@ -44,42 +46,42 @@ function OfferPage() {
     return <p>Loading offer details...</p>;
   }
 
+  const handleMainBookmarkClick = () => {
+    if (authorizationStatus !== 'AUTH') {
+      navigate('/login');
+      return;
+    }
+    dispatch(toggleFavorite(currentOffer.id, currentOffer.isFavorite))
+      .then(() => {
+        if (id) {
+          dispatch(fetchOfferById(id));
+          dispatch(fetchNearbyOffers(id));
+        }
+      });
+  };
+
+  const handleNearbyFavoriteToggle = (offerId: string, isCurrentlyFavorite: boolean) => {
+    if (authorizationStatus !== 'AUTH') {
+      navigate('/login');
+      return;
+    }
+    dispatch(toggleFavorite(offerId, isCurrentlyFavorite))
+      .then(() => {
+        if (id) {
+          dispatch(fetchOfferById(id));
+          dispatch(fetchNearbyOffers(id));
+        }
+      });
+  };
+
+  const nearbyToDisplay = nearbyOffers.slice(0, 3);
+  const starCount = Math.round(currentOffer.rating);
+  const starWidth = starCount * 20;
+  const numericLabel = currentOffer.rating.toFixed(1);
+
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <a className="header__logo-link" href="/">
-                <img
-                  className="header__logo"
-                  src="img/logo.svg"
-                  alt="6 cities logo"
-                  width="81"
-                  height="41"
-                />
-              </a>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <span className="header__favorite-count">3</span>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+      <Header />
       <main className="page__main page__main--offer">
         <section className="offer">
           <div className="offer__gallery-container container">
@@ -100,20 +102,28 @@ function OfferPage() {
               )}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">{currentOffer.title}</h1>
-                <button className="offer__bookmark-button button" type="button">
+                <button
+                  className={`offer__bookmark-button button ${
+                    currentOffer.isFavorite ? 'offer__bookmark-button--active' : ''
+                  }`}
+                  type="button"
+                  onClick={handleMainBookmarkClick}
+                >
                   <svg className="offer__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark"></use>
+                    <use xlinkHref="#icon-bookmark" />
                   </svg>
-                  <span className="visually-hidden">To bookmarks</span>
+                  <span className="visually-hidden">
+                    {currentOffer.isFavorite ? 'In bookmarks' : 'To bookmarks'}
+                  </span>
                 </button>
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{ width: `${currentOffer.rating}%` }}></span>
+                  <span style={{ width: `${starWidth}%` }} />
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">
-                  {(currentOffer.rating / 20).toFixed(1)}
+                  {numericLabel}
                 </span>
               </div>
               <ul className="offer__features">
@@ -142,7 +152,7 @@ function OfferPage() {
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>
                 {currentOffer.host && (
-                  <div className="offer__host-user user">
+                  <div className="offer__host-user">
                     <div
                       className={`offer__avatar-wrapper user__avatar-wrapper ${
                         currentOffer.host.isPro ? 'offer__avatar-wrapper--pro' : ''
@@ -156,10 +166,12 @@ function OfferPage() {
                         alt="Host avatar"
                       />
                     </div>
-                    <span className="offer__user-name">{currentOffer.host.name}</span>
-                    <span className="offer__user-status">
-                      {currentOffer.host.isPro ? 'Pro' : ''}
-                    </span>
+                    <div className="offer__host-info">
+                      <span className="offer__user-name">{currentOffer.host.name}</span>
+                      <span className="offer__user-status">
+                        {currentOffer.host.isPro ? 'Pro' : ''}
+                      </span>
+                    </div>
                   </div>
                 )}
                 <div className="offer__description">
@@ -175,13 +187,23 @@ function OfferPage() {
             </div>
           </div>
           <section className="offer__map map">
-            <Map offers={nearbyOffers} />
+            <Map
+              offers={[currentOffer, ...nearbyToDisplay]}
+              centerCoordinates={[
+                currentOffer.location.latitude,
+                currentOffer.location.longitude,
+              ]}
+              currentOfferId={currentOffer.id}
+            />
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <OfferList offers={nearbyOffers} />
+            <OfferList
+              offers={nearbyToDisplay}
+              onFavoriteToggle={handleNearbyFavoriteToggle}
+            />
           </section>
         </div>
       </main>
