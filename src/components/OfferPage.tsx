@@ -75,7 +75,6 @@ function OfferPage() {
   };
 
   const nearbyToDisplay = nearbyOffers.slice(0, 3);
-
   const starCount = Math.round(currentOffer.rating);
   const starWidth = starCount * 20;
   const numericLabel = currentOffer.rating.toFixed(1);
@@ -153,27 +152,27 @@ function OfferPage() {
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>
                 {currentOffer.host && (
-                  <div
-                    className={`offer__avatar-wrapper user__avatar-wrapper ${
-                      currentOffer.host.isPro ? 'offer__avatar-wrapper--pro' : ''
-                    }`}
-                  >
-                    <img
-                      className="offer__avatar user__avatar"
-                      src={currentOffer.host.avatarUrl}
-                      width="74"
-                      height="74"
-                      alt="Host avatar"
-                    />
+                  <div className="offer__host-user">
+                    <div
+                      className={`offer__avatar-wrapper user__avatar-wrapper ${
+                        currentOffer.host.isPro ? 'offer__avatar-wrapper--pro' : ''
+                      }`}
+                    >
+                      <img
+                        className="offer__avatar user__avatar"
+                        src={currentOffer.host.avatarUrl}
+                        width="74"
+                        height="74"
+                        alt="Host avatar"
+                      />
+                    </div>
+                    <div className="offer__host-info">
+                      <span className="offer__user-name">{currentOffer.host.name}</span>
+                      <span className="offer__user-status">
+                        {currentOffer.host.isPro ? 'Pro' : ''}
+                      </span>
+                    </div>
                   </div>
-                )}
-                {currentOffer.host && (
-                  <>
-                    <span className="offer__user-name">{currentOffer.host.name}</span>
-                    <span className="offer__user-status">
-                      {currentOffer.host.isPro ? 'Pro' : ''}
-                    </span>
-                  </>
                 )}
                 <div className="offer__description">
                   <p className="offer__text">{currentOffer.description}</p>
