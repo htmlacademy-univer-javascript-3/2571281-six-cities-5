@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import MainPage from './Main';
-import LoginPage from './Login';
-import FavoritesPage from './Favorites';
-import OfferPage from './OfferPage';
-import Page404 from './404';
+import MainPage from '../pages/Main';
+import LoginPage from '../pages/Login';
+import FavoritesPage from '../pages/Favorites';
+import OfferPage from '../pages/OfferPage';
+import Page404 from '../pages/404';
 import PrivateRoute from './PrivateRoute';
 
 function App() {

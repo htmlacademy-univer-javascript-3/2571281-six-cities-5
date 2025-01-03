@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { fetchFavorites } from '../store/api-actions';
-import OfferCard from './OfferCard';
-import Header from './Header';
+import OfferCard from '../components/OfferCard';
+import Header from '../components/Header';
 import { Offer } from '../types';
 
 function groupOffersByCity(offers: Offer[]) {
