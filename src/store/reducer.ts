@@ -10,6 +10,7 @@ export type State = {
   user: User | null;
   comments: Comment[];
   nearbyOffers: Offer[];
+  favorites: Offer[];
 };
 
 const initialState: State = {
@@ -20,7 +21,8 @@ const initialState: State = {
   authorizationStatus: 'UNKNOWN',
   user: null,
   comments: [],
-  nearbyOffers: []
+  nearbyOffers: [],
+  favorites: []
 };
 
 function reducer(state: State = initialState, action: Actions): State {
@@ -41,6 +43,20 @@ function reducer(state: State = initialState, action: Actions): State {
       return { ...state, comments: action.payload, isLoading: false };
     case 'setNearbyOffers':
       return { ...state, nearbyOffers: action.payload, isLoading: false };
+    case 'setFavorites':
+      return { ...state, favorites: action.payload, isLoading: false };
+    case 'updateOffer': {
+      const updated = action.payload;
+      const updatedOffers = state.offers.map((o) => (o.id === updated.id ? updated : o));
+      const updatedFavorites = state.favorites.map((o) => (o.id === updated.id ? updated : o));
+      const updatedCurrent = state.currentOffer?.id === updated.id ? updated : state.currentOffer;
+      return {
+        ...state,
+        offers: updatedOffers,
+        favorites: updatedFavorites,
+        currentOffer: updatedCurrent
+      };
+    }
     default:
       return state;
   }

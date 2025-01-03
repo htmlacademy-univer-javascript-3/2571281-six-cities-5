@@ -6,7 +6,8 @@ import { RootState, AppDispatch } from '../store';
 import {
   fetchOfferById,
   fetchCommentsByOfferId,
-  fetchNearbyOffers
+  fetchNearbyOffers,
+  toggleFavorite
 } from '../store/api-actions';
 import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
@@ -45,6 +46,14 @@ function OfferPage() {
     return <p>Loading offer details...</p>;
   }
 
+  const handleBookmarkClick = () => {
+    if (authorizationStatus !== 'AUTH') {
+      navigate('/login');
+      return;
+    }
+    dispatch(toggleFavorite(currentOffer.id, currentOffer.isFavorite));
+  };
+
   const nearbyToDisplay = nearbyOffers.slice(0, 3);
 
   return (
@@ -70,11 +79,19 @@ function OfferPage() {
               )}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">{currentOffer.title}</h1>
-                <button className="offer__bookmark-button button" type="button">
+                <button
+                  className={`offer__bookmark-button button ${
+                    currentOffer.isFavorite ? 'offer__bookmark-button--active' : ''
+                  }`}
+                  type="button"
+                  onClick={handleBookmarkClick}
+                >
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark" />
                   </svg>
-                  <span className="visually-hidden">To bookmarks</span>
+                  <span className="visually-hidden">
+                    {currentOffer.isFavorite ? 'In bookmarks' : 'To bookmarks'}
+                  </span>
                 </button>
               </div>
               <div className="offer__rating rating">

@@ -1,11 +1,17 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../store';
+import { fetchFavorites } from '../store/api-actions';
 import OfferCard from './OfferCard';
 import Header from './Header';
 
 function FavoritesPage() {
-  const offers = useSelector((state: RootState) => state.offers);
-  const favoriteOffers = offers.filter((offer) => offer.isFavorite);
+  const dispatch = useDispatch<AppDispatch>();
+  const favorites = useSelector((state: RootState) => state.favorites);
+
+  useEffect(() => {
+    dispatch(fetchFavorites());
+  }, [dispatch]);
 
   return (
     <div className="page">
@@ -15,8 +21,8 @@ function FavoritesPage() {
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
-              {favoriteOffers.length > 0 ? (
-                favoriteOffers.map((offer) => (
+              {favorites.length > 0 ? (
+                favorites.map((offer) => (
                   <li key={offer.id} className="favorites__locations-items">
                     <div className="favorites__locations locations locations--current">
                       <div className="locations__item">
