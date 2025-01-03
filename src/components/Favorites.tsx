@@ -35,9 +35,7 @@ function FavoritesPage() {
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            {cityNames.length === 0 && (
-              <p>Nothing yet saved.</p>
-            )}
+            {cityNames.length === 0 && <p>Nothing yet saved.</p>}
             {cityNames.map((city) => (
               <div key={city}>
                 <div className="favorites__locations locations locations--current">
@@ -49,10 +47,7 @@ function FavoritesPage() {
                 </div>
                 <ul className="favorites__list">
                   {groupedFavorites[city].map((offer) => (
-                    <li
-                      key={offer.id}
-                      className="favorites__locations-items"
-                    >
+                    <li key={offer.id} className="favorites__locations-items">
                       <div className="favorites__places">
                         <OfferCard offer={offer} />
                       </div>

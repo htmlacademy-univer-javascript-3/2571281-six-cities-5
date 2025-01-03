@@ -1,4 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store';
+import { toggleFavorite } from '../store/api-actions';
 import { Offer } from '../types';
 
 interface OfferCardProps {
@@ -6,6 +9,18 @@ interface OfferCardProps {
 }
 
 function OfferCard({ offer }: OfferCardProps) {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
+
+  const handleBookmarkClick = () => {
+    if (authorizationStatus !== 'AUTH') {
+      navigate('/login');
+      return;
+    }
+    dispatch(toggleFavorite(offer.id, offer.isFavorite));
+  };
+
   return (
     <article className="cities__card place-card">
       {offer.isPremium && (
@@ -35,12 +50,9 @@ function OfferCard({ offer }: OfferCardProps) {
               offer.isFavorite ? 'place-card__bookmark-button--active' : ''
             }`}
             type="button"
+            onClick={handleBookmarkClick}
           >
-            <svg
-              className="place-card__bookmark-icon"
-              width="18"
-              height="19"
-            >
+            <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
             <span className="visually-hidden">
