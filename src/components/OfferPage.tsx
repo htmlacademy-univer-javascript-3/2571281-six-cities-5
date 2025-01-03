@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { RootState, AppDispatch } from '../store';
@@ -12,7 +12,6 @@ import ReviewList from './ReviewList';
 import ReviewForm from './ReviewForm';
 import Map from './Map';
 import OfferList from './OfferList';
-import { Link } from 'react-router-dom';
 
 function OfferPage() {
   const { id } = useParams<{ id: string }>();
@@ -55,7 +54,8 @@ function OfferPage() {
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <a className="header__logo-link" href="/">
+              {/* Changed from <a href="/"> to <Link to="/"> */}
+              <Link className="header__logo-link" to="/">
                 <img
                   className="header__logo"
                   src="img/logo.svg"
@@ -63,7 +63,7 @@ function OfferPage() {
                   width="81"
                   height="41"
                 />
-              </a>
+              </Link>
             </div>
             <nav className="header__nav">
               <ul className="header__nav-list">

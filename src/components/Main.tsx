@@ -56,7 +56,8 @@ function MainPage() {
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <a className="header__logo-link header__logo-link--active" href="/">
+              {/* Changed from <a href="/"> to <Link to="/"> */}
+              <Link className="header__logo-link header__logo-link--active" to="/">
                 <img
                   className="header__logo"
                   src="img/logo.svg"
@@ -64,7 +65,7 @@ function MainPage() {
                   width="81"
                   height="41"
                 />
-              </a>
+              </Link>
             </div>
             <nav className="header__nav">
               <ul className="header__nav-list">
