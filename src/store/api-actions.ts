@@ -27,10 +27,9 @@ export const fetchOfferById = (offerId: string) => async (
   _getState: () => RootState,
   api: AxiosInstance
 ) => {
-  dispatch(setLoading(true));
-  dispatch(setCurrentOffer(null));
   const { data } = await api.get<Offer>(`/offers/${offerId}`);
   dispatch(setCurrentOffer(data));
+  dispatch(setLoading(false));
 };
 
 export const fetchCommentsByOfferId = (offerId: string) => async (
@@ -49,7 +48,6 @@ export const fetchNearbyOffers = (offerId: string) => async (
   _getState: () => RootState,
   api: AxiosInstance
 ) => {
-  dispatch(setLoading(true));
   const { data } = await api.get<Offer[]>(`/offers/${offerId}/nearby`);
   dispatch(setNearbyOffers(data));
   dispatch(setLoading(false));
@@ -170,7 +168,6 @@ export const toggleFavorite = (offerId: string, isFavorite: boolean) => async (
   _getState: () => RootState,
   api: AxiosInstance
 ) => {
-  dispatch(setLoading(true));
   try {
     const status = isFavorite ? 0 : 1;
     await api.post<Offer>(`/favorite/${offerId}/${status}`);
