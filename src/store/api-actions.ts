@@ -83,6 +83,7 @@ export const authorize = (email: string, password: string) => async (
     const { data } = await api.post<User>('/login', { email, password });
     dispatch(setUser(data));
     dispatch(setAuthorizationStatus('AUTH'));
+    localStorage.setItem('token', data.token);
     api.defaults.headers.common['X-Token'] = data.token;
   } catch {
     dispatch(setAuthorizationStatus('NO_AUTH'));
@@ -91,6 +92,28 @@ export const authorize = (email: string, password: string) => async (
     dispatch(setLoading(false));
   }
 };
+
+export const initializeAuth = () => async (
+  dispatch: AppDispatch,
+  _getState: () => RootState,
+  api: AxiosInstance
+) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    api.defaults.headers.common['X-Token'] = token;
+    try {
+      const { data } = await api.get<User>('/login');
+      dispatch(setUser(data));
+      dispatch(setAuthorizationStatus('AUTH'));
+    } catch {
+      localStorage.removeItem('token');
+      dispatch(setAuthorizationStatus('NO_AUTH'));
+    }
+  } else {
+    dispatch(setAuthorizationStatus('NO_AUTH'));
+  }
+};
+
 
 export const postComment = (
   offerId: string,
@@ -119,6 +142,7 @@ export const logout = () => async (
     await api.delete('/logout');
   } finally {
     dispatch(setLoading(false));
+    localStorage.removeItem('token');
     dispatch(setUser(null));
     dispatch(setAuthorizationStatus('NO_AUTH'));
     delete api.defaults.headers.common['X-Token'];
