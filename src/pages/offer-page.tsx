@@ -7,7 +7,8 @@ import {
   fetchOfferById,
   fetchCommentsByOfferId,
   fetchNearbyOffers,
-  toggleFavorite
+  toggleFavorite,
+  fetchFavorites
 } from '../store/api-actions';
 import ReviewList from '../components/review-list';
 import ReviewForm from '../components/review-form';
@@ -23,6 +24,10 @@ function OfferPage() {
   const comments = useSelector((state: RootState) => state.comments);
   const nearbyOffers = useSelector((state: RootState) => state.nearbyOffers);
   const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
+
+  useEffect(() => {
+    dispatch(fetchFavorites());
+  }, [dispatch]);
 
   useEffect(() => {
     async function loadOfferData() {

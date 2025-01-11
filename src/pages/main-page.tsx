@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
-import { fetchOffers } from '../store/api-actions';
+import { fetchFavorites, fetchOffers } from '../store/api-actions';
 import CitiesList from '../components/cities-list';
 import OfferList from '../components/offer-list';
 import Map from '../components/map';
@@ -27,6 +27,10 @@ function MainPage() {
     Hamburg: [53.550341, 10.000654],
     Dusseldorf: [51.225402, 6.776314],
   };
+
+  useEffect(() => {
+    dispatch(fetchFavorites());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchOffers());

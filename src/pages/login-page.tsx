@@ -18,14 +18,13 @@ function LoginPage() {
     }
   }, [authorizationStatus, navigate]);
 
-  const handleSubmit = (evt: FormEvent) => {
-    evt.preventDefault();
-    const email = emailRef.current?.value || '';
-    const password = passwordRef.current?.value || '';
-    dispatch(authorize(email, password))
-      .then(() => {
-        navigate('/');
-      });
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    const email = emailRef.current?.value.trim() || '';
+    const password = passwordRef.current?.value.trim() || '';
+    if (email && password) {
+      dispatch(authorize(email, password));
+    }
   };
 
   return (
@@ -52,7 +51,7 @@ function LoginPage() {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" onSubmit={handleSubmit} action="#" method="post">
+            <form className="login__form form" onSubmit={handleSubmit}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden" htmlFor="login-email">E-mail</label>
                 <input

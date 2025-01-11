@@ -27,10 +27,9 @@ export const fetchOfferById = (offerId: string) => async (
   _getState: () => RootState,
   api: AxiosInstance
 ) => {
-  dispatch(setLoading(true));
-  dispatch(setCurrentOffer(null));
   const { data } = await api.get<Offer>(`/offers/${offerId}`);
   dispatch(setCurrentOffer(data));
+  dispatch(setLoading(false));
 };
 
 export const fetchCommentsByOfferId = (offerId: string) => async (
@@ -49,7 +48,6 @@ export const fetchNearbyOffers = (offerId: string) => async (
   _getState: () => RootState,
   api: AxiosInstance
 ) => {
-  dispatch(setLoading(true));
   const { data } = await api.get<Offer[]>(`/offers/${offerId}/nearby`);
   dispatch(setNearbyOffers(data));
   dispatch(setLoading(false));
@@ -83,6 +81,7 @@ export const authorize = (email: string, password: string) => async (
     const { data } = await api.post<User>('/login', { email, password });
     dispatch(setUser(data));
     dispatch(setAuthorizationStatus('AUTH'));
+    localStorage.setItem('token', data.token);
     api.defaults.headers.common['X-Token'] = data.token;
   } catch {
     dispatch(setAuthorizationStatus('NO_AUTH'));
@@ -91,6 +90,28 @@ export const authorize = (email: string, password: string) => async (
     dispatch(setLoading(false));
   }
 };
+
+export const initializeAuth = () => async (
+  dispatch: AppDispatch,
+  _getState: () => RootState,
+  api: AxiosInstance
+) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    api.defaults.headers.common['X-Token'] = token;
+    try {
+      const { data } = await api.get<User>('/login');
+      dispatch(setUser(data));
+      dispatch(setAuthorizationStatus('AUTH'));
+    } catch {
+      localStorage.removeItem('token');
+      dispatch(setAuthorizationStatus('NO_AUTH'));
+    }
+  } else {
+    dispatch(setAuthorizationStatus('NO_AUTH'));
+  }
+};
+
 
 export const postComment = (
   offerId: string,
@@ -119,6 +140,7 @@ export const logout = () => async (
     await api.delete('/logout');
   } finally {
     dispatch(setLoading(false));
+    localStorage.removeItem('token');
     dispatch(setUser(null));
     dispatch(setAuthorizationStatus('NO_AUTH'));
     delete api.defaults.headers.common['X-Token'];
@@ -146,7 +168,6 @@ export const toggleFavorite = (offerId: string, isFavorite: boolean) => async (
   _getState: () => RootState,
   api: AxiosInstance
 ) => {
-  dispatch(setLoading(true));
   try {
     const status = isFavorite ? 0 : 1;
     await api.post<Offer>(`/favorite/${offerId}/${status}`);

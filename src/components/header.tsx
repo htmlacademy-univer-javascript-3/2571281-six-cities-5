@@ -11,6 +11,7 @@ function Header() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
+
   const handleSignOutClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
     dispatch(logout());
